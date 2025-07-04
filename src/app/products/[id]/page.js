@@ -40,18 +40,18 @@ function Page() {
       <Accordion type="single" collapsible className={styles.accordion}>
         <AccordionItem value="item-1">
           <AccordionTrigger>Description</AccordionTrigger>
-          <AccordionContent>{prodinfo.description}</AccordionContent>
+          <AccordionContent>{prodinfo?.description}</AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="item-2">
           <AccordionTrigger>Price</AccordionTrigger>
-          <AccordionContent>R {prodinfo.price}</AccordionContent>
+          <AccordionContent>R {prodinfo?.price}</AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="item-3">
           <AccordionTrigger>Sizes</AccordionTrigger>
           <AccordionContent className={styles.options}>
-            {prodinfo.sizes?.map((e, i) => (
+            {prodinfo?.sizes?.map((e, i) => (
               <Button key={i} variant="outline" className={styles.optionBtn}>
                 {e}
               </Button>
@@ -62,7 +62,7 @@ function Page() {
         <AccordionItem value="item-4">
           <AccordionTrigger>Colors</AccordionTrigger>
           <AccordionContent className={styles.options}>
-            {prodinfo.colors?.map((e, i) => (
+            {prodinfo?.colors?.map((e, i) => (
               <Button key={i} variant="outline" className={styles.optionBtn}>
                 {e}
               </Button>

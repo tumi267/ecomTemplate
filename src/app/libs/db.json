@@ -1,87 +1,96 @@
 {
     "storeName": "Urban Vibe Merch",
     "categories": [
-      {
-        "name": "T-Shirts",
-        "image": "https://images.unsplash.com/photo-1520975922322-711f3f5e49f9",
-        "description": "Fresh, bold, and effortlessly cool — our tees are made to move with your lifestyle.",
-        "items": [
-          {
-            "id": "ts001",
-            "name": "Classic Black Tee",
-            "price": 199.99,
-            "currency": "ZAR",
-            "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
-            "sizes": ["S", "M", "L", "XL"],
-            "inStock": true,
-            "description": "Keep it clean and classic with this black tee — the ultimate wardrobe staple made from 100% soft cotton."
-          },
-          {
-            "id": "ts002",
-            "name": "White Logo Tee",
-            "price": 219.99,
-            "currency": "ZAR",
-            "image": "https://images.unsplash.com/photo-1602810316690-c9947c2b2494",
-            "sizes": ["S", "M", "L"],
-            "inStock": true,
-            "description": "Rock the brand loud and proud with our signature white logo tee. Lightweight, bold, and made for everyday hustle."
-          }
-        ]
-      },
-      {
-        "name": "Caps",
-        "image": "https://images.unsplash.com/photo-1600180758890-6b94519b8b1b",
-        "description": "Cap off your look with street-savvy styles made for sun, shade, and swag.",
-        "items": [
-          {
-            "id": "cap001",
-            "name": "Flat Brim Snapback",
-            "price": 149.99,
-            "currency": "ZAR",
-            "image": "https://images.unsplash.com/photo-1542062703-8eb4f2086d3d",
-            "colors": ["Black", "Red", "Navy"],
-            "inStock": true,
-            "description": "Top off your streetwear fit with this flat brim snapback — structured, stylish, and adjustable for all sizes."
-          },
-          {
-            "id": "cap002",
-            "name": "Curved Cap With Logo",
-            "price": 129.99,
-            "currency": "ZAR",
-            "image": "https://images.unsplash.com/photo-1565058528601-b57a47ab3aef",
-            "colors": ["White", "Grey"],
-            "inStock": false,
-            "description": "A classic curved brim cap with a minimalist logo design. Pairs perfectly with any outfit, any day."
-          }
-        ]
-      },
-      {
-        "name": "Tracksuits",
-        "image": "https://images.unsplash.com/photo-1582738413449-648ed127bb55",
-        "description": "All-day comfort meets all-out drip. Tracksuits that keep you looking sharp on the move.",
-        "items": [
-          {
-            "id": "tsuit001",
-            "name": "Urban Tracksuit Set",
-            "price": 499.99,
-            "currency": "ZAR",
-            "image": "https://images.unsplash.com/photo-1615900178302-25e3c005fdbb",
-            "sizes": ["M", "L", "XL"],
-            "inStock": true,
-            "description": "Step into sleek comfort with our full Urban Tracksuit Set. Tailored for movement, styled for impact."
-          },
-          {
-            "id": "tsuit002",
-            "name": "Street Style Tracksuit",
-            "price": 549.99,
-            "currency": "ZAR",
-            "image": "https://images.unsplash.com/photo-1602810317523-f7094c3b92ed",
-            "sizes": ["S", "M", "L"],
-            "inStock": true,
-            "description": "Make a bold move in this color-blocked street-style tracksuit — perfect for chilling or hitting the pavement."
-          }
-        ]
-      }
-    ]
-  }
+    {
+      "id": "cat001",
+      "name": "T-Shirts",
+      "image": "https://images.unsplash.com/photo-1520975922322-711f3f5e49f9",
+      "description": "Fresh, bold, and effortlessly cool — our tees are made to move with your lifestyle.",
+      "items": [
+        {
+          "id": "ts001",
+          "categoryId": "cat001",
+          "name": "Classic Black Tee",
+          "price": 199.99,
+          "currency": "ZAR",
+          "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+          "sizes": ["S", "M", "L", "XL"],
+          "inStock": true,
+          "description": "Keep it clean and classic with this black tee — the ultimate wardrobe staple made from 100% soft cotton."
+        },
+        {
+          "id": "ts002",
+          "categoryId": "cat001",
+          "name": "White Logo Tee",
+          "price": 219.99,
+          "currency": "ZAR",
+          "image": "https://images.unsplash.com/photo-1602810316690-c9947c2b2494",
+          "sizes": ["S", "M", "L"],
+          "inStock": true,
+          "description": "Rock the brand loud and proud with our signature white logo tee. Lightweight, bold, and made for everyday hustle."
+        }
+      ]
+    },
+    {
+      "id": "cat002",
+      "name": "Caps",
+      "image": "https://images.unsplash.com/photo-1600180758890-6b94519b8b1b",
+      "description": "Cap off your look with street-savvy styles made for sun, shade, and swag.",
+      "items": [
+        {
+          "id": "cap001",
+          "categoryId": "cat002",
+          "name": "Flat Brim Snapback",
+          "price": 149.99,
+          "currency": "ZAR",
+          "image": "https://images.unsplash.com/photo-1542062703-8eb4f2086d3d",
+          "colors": ["Black", "Red", "Navy"],
+          "inStock": true,
+          "description": "Top off your streetwear fit with this flat brim snapback — structured, stylish, and adjustable for all sizes."
+        },
+        {
+          "id": "cap002",
+          "categoryId": "cat002",
+          "name": "Curved Cap With Logo",
+          "price": 129.99,
+          "currency": "ZAR",
+          "image": "https://images.unsplash.com/photo-1565058528601-b57a47ab3aef",
+          "colors": ["White", "Grey"],
+          "inStock": false,
+          "description": "A classic curved brim cap with a minimalist logo design. Pairs perfectly with any outfit, any day."
+        }
+      ]
+    },
+    {
+      "id": "cat003",
+      "name": "Tracksuits",
+      "image": "https://images.unsplash.com/photo-1582738413449-648ed127bb55",
+      "description": "All-day comfort meets all-out drip. Tracksuits that keep you looking sharp on the move.",
+      "items": [
+        {
+          "id": "tsuit001",
+          "categoryId": "cat003",
+          "name": "Urban Tracksuit Set",
+          "price": 499.99,
+          "currency": "ZAR",
+          "image": "https://images.unsplash.com/photo-1615900178302-25e3c005fdbb",
+          "sizes": ["M", "L", "XL"],
+          "inStock": true,
+          "description": "Step into sleek comfort with our full Urban Tracksuit Set. Tailored for movement, styled for impact."
+        },
+        {
+          "id": "tsuit002",
+          "categoryId": "cat003",
+          "name": "Street Style Tracksuit",
+          "price": 549.99,
+          "currency": "ZAR",
+          "image": "https://images.unsplash.com/photo-1602810317523-f7094c3b92ed",
+          "sizes": ["S", "M", "L"],
+          "inStock": true,
+          "description": "Make a bold move in this color-blocked street-style tracksuit — perfect for chilling or hitting the pavement."
+        }
+      ]
+    }
+  ]
+}
   

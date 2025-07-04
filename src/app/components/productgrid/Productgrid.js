@@ -24,7 +24,7 @@ function ProductGrid({title,items,selector}) {
     setcardinfo(items)
    }
  }
- ,[items,selector])
+ ,[items])
 
 // add to cart
 const regex = (text, numWords) => {
