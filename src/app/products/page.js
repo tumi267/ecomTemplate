@@ -19,6 +19,7 @@ function product() {
      <ProductGrid
     title='Products'
     items={filtered.length>0?filtered:items}
+    param={1}
     />
     </div>
   )

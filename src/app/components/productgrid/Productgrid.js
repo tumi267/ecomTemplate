@@ -13,7 +13,7 @@ import Image from 'next/image.js'
 import styles from './ProductGrid.module.css'
 import Link from 'next/link.js'
 import AddToCartButton from '../AddToCartButton/AddToCartButton.js'
-function ProductGrid({title,items,selector}) {
+function ProductGrid({title,items,selector,param}) {
   const [cardinfo, setcardinfo] = useState([]);
 
  useEffect(()=>{
@@ -37,6 +37,42 @@ const regex = (text, numWords) => {
   return (
     <div>
         <h1 className={styles.title}>{title}</h1>
+        {param !== undefined && (
+           <ul className={styles.navList}>
+           <li>
+             <Link
+               href="/products"
+               className={param === 1 ? styles.active : ''}
+             >
+               Products
+             </Link>
+           </li>
+           <li>
+             <Link
+               href="/category/T-Shirts"
+               className={param === 'T-Shirts' ? styles.active : ''}
+             >
+               T-Shirts
+             </Link>
+           </li>
+           <li>
+             <Link
+               href="/category/Caps"
+               className={param === 'Caps' ? styles.active : ''}
+             >
+               Caps
+             </Link>
+           </li>
+           <li>
+             <Link
+               href="/category/Tracksuits"
+               className={param === 'Tracksuits' ? styles.active : ''}
+             >
+               Tracksuits
+             </Link>
+           </li>
+         </ul>
+        )}
         <div className={styles.card_contain}>
         {cardinfo?.map((e,i)=>{
         return<Card key={i} className={styles.card}>

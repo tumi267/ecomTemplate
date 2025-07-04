@@ -21,7 +21,7 @@ function CategoryPage() {
     <ProductGrid
     title={params.id}
     items={filtered.length>0?filtered:items}
-   
+    param={params.id}
     />
     </div>
   )
