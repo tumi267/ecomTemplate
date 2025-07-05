@@ -6,7 +6,7 @@ import ProductGrid from '../components/productgrid/Productgrid'
 import ProductFillter from '../components/productFilter/ProductFillter'
 import { useEffect, useState } from 'react'
 
-function product() {
+function Product() {
   const items=db.categories.flatMap((e)=>{return e.items})
   const [filtered,setFilterd]=useState([])
 
@@ -25,4 +25,4 @@ function product() {
   )
 }
 
-export default product
+export default Product
