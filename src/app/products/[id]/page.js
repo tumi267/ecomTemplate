@@ -51,7 +51,7 @@ function Page() {
   const hasVariants = requiresSize || requiresColor
   const allVariantsSelected = isReadyToAdd
   const disableAddToCart = hasVariants && !allVariantsSelected
-console.log(VariantinStock)
+
   return (
     <div className={styles.productPage}>
       <div className={styles.productGrid}>
@@ -67,7 +67,7 @@ console.log(VariantinStock)
           <section className={styles.section}>
             <h1 className={styles.title}>{regex(params.id)}</h1>
           </section>
-
+          {/* can be a accordian */}
           <section className={styles.section}>
             <h4>{prodinfo?.description}</h4>
           </section>

@@ -1,0 +1,16 @@
+variant {
+   - if item has no qty enable btn
+}
+nav{
+   - drawer
+   - search
+   - category
+   -favourites
+   -on hover cart display cart items
+}
+cards{
+    -favourites
+}
+product{
+    favourites
+}
