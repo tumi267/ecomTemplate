@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useEffect, useState } from 'react'
 import {
   Card,
@@ -41,11 +42,13 @@ function ProductGrid({ title, items, selector, param }) {
   const [variants, setVariants] = useState({})
 
   const updateVariant = (index, field, value) => {
+    const variantValue = JSON.parse(value)
     setVariants(prev => ({
       ...prev,
       [index]: {
         ...prev[index],
-        [field]: value
+        [field]: variantValue,
+        variantInStock: variantValue.qty > 0
       }
     }))
   }
@@ -70,6 +73,7 @@ function ProductGrid({ title, items, selector, param }) {
 
           const selectedSize = variants[index]?.selectedSize || null
           const selectedColor = variants[index]?.selectedColor || null
+          const variantInStock = variants[index]?.variantInStock
 
           const allVariantsSelected = 
             (!requiresSize || selectedSize) &&
@@ -77,9 +81,14 @@ function ProductGrid({ title, items, selector, param }) {
 
           const selectedVariant = {
             ...product,
-            ...(product.sizes && { sizes: selectedSize }),
-            ...(product.colors && { colors: selectedColor }),
+            ...(requiresSize && { sizes: selectedSize }),
+            ...(requiresColor && { colors: selectedColor }),
           }
+
+          const shouldDisable = 
+            !allVariantsSelected || 
+            (selectedSize && selectedSize.qty <= 0) || 
+            (selectedColor && selectedColor.qty <= 0)
 
           return (
             <Card key={index} className={styles.card}>
@@ -90,7 +99,11 @@ function ProductGrid({ title, items, selector, param }) {
                 </CardHeader>
                 <CardContent>
                   <div className={styles.image_wrapper}>
-                    <Image src='/next.svg' alt={product.name} fill />
+                    {variantInStock !== false ? (
+                      <Image src='/next.svg' alt={product.name} fill />
+                    ) : (
+                      <div className={styles.outOfStockOverlay}>Out of Stock</div>
+                    )}
                   </div>
                 </CardContent>
               </Link>
@@ -104,17 +117,24 @@ function ProductGrid({ title, items, selector, param }) {
                 <div className={styles.variantSection}>
                   <p className={styles.variantLabel}>Size</p>
                   <div className={styles.options}>
-                    {product.sizes.map((size, i) => (
-                      <Button
-                        key={i}
-                        value={size}
-                        onClick={() => updateVariant(index, 'selectedSize', size)}
-                        className={`${styles.optionBtn} ${selectedSize === size ? styles.active : ''}`}
-                        variant="outline"
-                      >
-                        {size}
-                      </Button>
-                    ))}
+                    {product.sizes.map((size, i) => {
+                      const sizeStr = JSON.stringify(size)
+                      const selectedStr = selectedSize ? JSON.stringify(selectedSize) : ''
+                      return (
+                        <Button
+                          key={i}
+                          value={sizeStr}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            updateVariant(index, 'selectedSize', sizeStr)
+                          }}
+                          className={`${styles.optionBtn} ${selectedStr === sizeStr ? styles.active : ''}`}
+                          variant="outline"
+                        >
+                          {size.size}
+                        </Button>
+                      )
+                    })}
                   </div>
                 </div>
               )}
@@ -124,22 +144,35 @@ function ProductGrid({ title, items, selector, param }) {
                 <div className={styles.variantSection}>
                   <p className={styles.variantLabel}>Color</p>
                   <div className={styles.options}>
-                    {product.colors.map((color, i) => (
-                      <Button
-                        key={i}
-                        value={color}
-                        onClick={() => updateVariant(index, 'selectedColor', color)}
-                        className={`${styles.optionBtn} ${selectedColor === color ? styles.active : ''}`}
-                        variant="outline"
-                      >
-                        {color}
-                      </Button>
-                    ))}
+                    {product.colors.map((color, i) => {
+                      const colorStr = JSON.stringify(color)
+                      const selectedStr = selectedColor ? JSON.stringify(selectedColor) : ''
+                      return (
+                        <Button
+                          key={i}
+                          value={colorStr}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            updateVariant(index, 'selectedColor', colorStr)
+                          }}
+                          className={`${styles.optionBtn} ${selectedStr === colorStr ? styles.active : ''}`}
+                          variant="outline"
+                        >
+                          {color.color}
+                        </Button>
+                      )
+                    })}
                   </div>
                 </div>
               )}
 
-              <AddToCartButton product={selectedVariant} disabled={!allVariantsSelected} />
+              <AddToCartButton 
+                product={selectedVariant} 
+                disabled={shouldDisable}
+                variant={(isDisabled) => {
+                  // This callback can be used if needed
+                }}
+              />
 
               <CardDescription className={styles.price}>R {product.price}</CardDescription>
             </Card>

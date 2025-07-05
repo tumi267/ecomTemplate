@@ -14,7 +14,12 @@
           "price": 199.99,
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
-          "sizes": ["S", "M", "L", "XL"],
+          "sizes": [
+            {"size": "S", "qty": 0, "price": 199.99},
+            {"size": "M", "qty": 15, "price": 199.99},
+            {"size": "L", "qty": 8, "price": 199.99},
+            {"size": "XL", "qty": 5, "price": 219.99}
+          ],
           "inStock": true,
           "bestSeller": true,
           "weekSale": true,
@@ -27,7 +32,11 @@
           "price": 219.99,
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1602810316690-c9947c2b2494",
-          "sizes": ["S", "M", "L"],
+          "sizes": [
+            {"size": "S", "qty": 12, "price": 219.99},
+            {"size": "M", "qty": 7, "price": 219.99},
+            {"size": "L", "qty": 3, "price": 219.99}
+          ],
           "inStock": true,
           "bestSeller": false,
           "weekSale": false,
@@ -48,7 +57,11 @@
           "price": 149.99,
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1542062703-8eb4f2086d3d",
-          "colors": ["Black", "Red", "Navy"],
+          "colors": [
+            {"color": "Black", "qty": 20, "price": 149.99},
+            {"color": "Red", "qty": 15, "price": 149.99},
+            {"color": "Navy", "qty": 10, "price": 149.99}
+          ],
           "inStock": true,
           "bestSeller": true,
           "weekSale": false,
@@ -61,7 +74,10 @@
           "price": 129.99,
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1565058528601-b57a47ab3aef",
-          "colors": ["White", "Grey"],
+          "colors": [
+            {"color": "White", "qty": 0, "price": 129.99},
+            {"color": "Grey", "qty": 0, "price": 129.99}
+          ],
           "inStock": false,
           "bestSeller": false,
           "weekSale": true,
@@ -82,7 +98,11 @@
           "price": 499.99,
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1615900178302-25e3c005fdbb",
-          "sizes": ["M", "L", "XL"],
+          "sizes": [
+            {"size": "M", "qty": 5, "price": 499.99},
+            {"size": "L", "qty": 8, "price": 499.99},
+            {"size": "XL", "qty": 3, "price": 519.99}
+          ],
           "inStock": true,
           "bestSeller": true,
           "weekSale": false,
@@ -95,7 +115,11 @@
           "price": 549.99,
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1602810317523-f7094c3b92ed",
-          "sizes": ["S", "M", "L"],
+          "sizes": [
+            {"size": "S", "qty": 4, "price": 549.99},
+            {"size": "M", "qty": 6, "price": 549.99},
+            {"size": "L", "qty": 2, "price": 549.99}
+          ],
           "inStock": true,
           "bestSeller": false,
           "weekSale": false,

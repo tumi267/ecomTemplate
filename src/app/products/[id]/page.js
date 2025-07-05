@@ -14,6 +14,7 @@ function Page() {
   const [prodinfo, setprodinfo] = useState({})
   const [selectedSize, setSelectedSize] = useState(null)
   const [selectedColor, setSelectedColor] = useState(null)
+  const [VariantinStock,setVariantinStock]=useState(null)
 
   useEffect(() => {
     const items = db.categories.flatMap((e) => e.items)
@@ -23,12 +24,15 @@ function Page() {
 
   const handleSizeChange = (e) => {
     e.preventDefault()
-    setSelectedSize(e.target.value)
+    setSelectedSize(JSON.parse(e.target.value))
+    
+    setVariantinStock(JSON.parse(e.target.value).qty)
   }
 
   const handleColorChange = (e) => {
     e.preventDefault()
-    setSelectedColor(e.target.value)
+    setSelectedColor(JSON.parse(e.target.value))
+    setVariantinStock(JSON.parse(e.target.value).qty)
   }
 
   const requiresSize = Array.isArray(prodinfo?.sizes) && prodinfo.sizes.length > 0
@@ -40,31 +44,26 @@ function Page() {
 
   const selectedVariant = {
     ...prodinfo,
-    ...(prodinfo?.sizes && { sizes: selectedSize }),
-    ...(prodinfo?.colors && { colors: selectedColor }),
+    ...(requiresSize && { sizes: selectedSize }),
+    ...(requiresColor && { colors: selectedColor }),
   }
-  
+
   const hasVariants = requiresSize || requiresColor
-
-  // Only allow add to cart if all required variants are selected
-  const allVariantsSelected =
-    (!requiresSize || selectedSize) &&
-    (!requiresColor || selectedColor)
-
+  const allVariantsSelected = isReadyToAdd
   const disableAddToCart = hasVariants && !allVariantsSelected
-  
+console.log(VariantinStock)
   return (
     <div className={styles.productPage}>
       <div className={styles.productGrid}>
-
         {/* Image */}
         <div className={styles.imageBox}>
-          <img src={"/next.svg"} alt={prodinfo.name} className={styles.image} />
+        {VariantinStock >0 || VariantinStock === null ?
+          <img src="/next.svg" alt={prodinfo.name} className={styles.image} />
+          :<h2>out of stock</h2>}
         </div>
 
         {/* Details */}
         <div className={styles.detailsBox}>
-
           <section className={styles.section}>
             <h1 className={styles.title}>{regex(params.id)}</h1>
           </section>
@@ -77,42 +76,50 @@ function Page() {
             <h3>Price: <span>R {prodinfo?.price}</span></h3>
           </section>
 
-          {/* Size Selector (Only if sizes exist) */}
+          {/* Size Selector (if sizes exist) */}
           {requiresSize && (
             <section className={styles.section}>
               <h3>Sizes</h3>
               <div className={styles.options}>
-                {prodinfo.sizes.map((size, i) => (
-                  <Button
-                    key={i}
-                    variant="outline"
-                    value={size}
-                    onClick={handleSizeChange}
-                    className={`${styles.optionBtn} ${selectedSize === size ? styles.active : ''}`}
-                  >
-                    {size}
-                  </Button>
-                ))}
+                {prodinfo.sizes.map((size, i) => {
+                  const sizeStr = JSON.stringify(size)
+                  const selectedStr = JSON.stringify(selectedSize)
+                  return (
+                    <Button
+                      key={i}
+                      variant="outline"
+                      value={sizeStr}
+                      onClick={handleSizeChange}
+                      className={`${styles.optionBtn} ${selectedStr === sizeStr ? styles.active : ''}`}
+                    >
+                      {size.size}
+                    </Button>
+                  )
+                })}
               </div>
             </section>
           )}
 
-          {/* Color Selector (Only if colors exist) */}
+          {/* Color Selector (if colors exist) */}
           {requiresColor && (
             <section className={styles.section}>
               <h3>Colors</h3>
               <div className={styles.options}>
-                {prodinfo.colors.map((color, i) => (
-                  <Button
-                    key={i}
-                    variant="outline"
-                    value={color}
-                    onClick={handleColorChange}
-                    className={`${styles.optionBtn} ${selectedColor === color ? styles.active : ''}`}
-                  >
-                    {color}
-                  </Button>
-                ))}
+                {prodinfo.colors.map((color, i) => {
+                  const colorStr = JSON.stringify(color)
+                  const selectedStr = JSON.stringify(selectedColor)
+                  return (
+                    <Button
+                      key={i}
+                      variant="outline"
+                      value={colorStr}
+                      onClick={handleColorChange}
+                      className={`${styles.optionBtn} ${selectedStr === colorStr ? styles.active : ''}`}
+                    >
+                      {color.color}
+                    </Button>
+                  )
+                })}
               </div>
             </section>
           )}
