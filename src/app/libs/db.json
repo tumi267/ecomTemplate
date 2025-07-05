@@ -76,7 +76,7 @@
           "image": "https://images.unsplash.com/photo-1565058528601-b57a47ab3aef",
           "colors": [
             {"color": "White", "qty": 0, "price": 129.99},
-            {"color": "Grey", "qty": 0, "price": 129.99}
+            {"color": "Grey", "qty": 2, "price": 129.99}
           ],
           "inStock": false,
           "bestSeller": false,
