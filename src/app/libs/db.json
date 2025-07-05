@@ -1,6 +1,6 @@
 {
-    "storeName": "Urban Vibe Merch",
-    "categories": [
+  "storeName": "Urban Vibe Merch",
+  "categories": [
     {
       "id": "cat001",
       "name": "T-Shirts",
@@ -16,6 +16,8 @@
           "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
           "sizes": ["S", "M", "L", "XL"],
           "inStock": true,
+          "bestSeller": true,
+          "weekSale": true,
           "description": "Keep it clean and classic with this black tee — the ultimate wardrobe staple made from 100% soft cotton."
         },
         {
@@ -27,6 +29,8 @@
           "image": "https://images.unsplash.com/photo-1602810316690-c9947c2b2494",
           "sizes": ["S", "M", "L"],
           "inStock": true,
+          "bestSeller": false,
+          "weekSale": false,
           "description": "Rock the brand loud and proud with our signature white logo tee. Lightweight, bold, and made for everyday hustle."
         }
       ]
@@ -46,6 +50,8 @@
           "image": "https://images.unsplash.com/photo-1542062703-8eb4f2086d3d",
           "colors": ["Black", "Red", "Navy"],
           "inStock": true,
+          "bestSeller": true,
+          "weekSale": false,
           "description": "Top off your streetwear fit with this flat brim snapback — structured, stylish, and adjustable for all sizes."
         },
         {
@@ -57,6 +63,8 @@
           "image": "https://images.unsplash.com/photo-1565058528601-b57a47ab3aef",
           "colors": ["White", "Grey"],
           "inStock": false,
+          "bestSeller": false,
+          "weekSale": true,
           "description": "A classic curved brim cap with a minimalist logo design. Pairs perfectly with any outfit, any day."
         }
       ]
@@ -76,6 +84,8 @@
           "image": "https://images.unsplash.com/photo-1615900178302-25e3c005fdbb",
           "sizes": ["M", "L", "XL"],
           "inStock": true,
+          "bestSeller": true,
+          "weekSale": false,
           "description": "Step into sleek comfort with our full Urban Tracksuit Set. Tailored for movement, styled for impact."
         },
         {
@@ -87,10 +97,11 @@
           "image": "https://images.unsplash.com/photo-1602810317523-f7094c3b92ed",
           "sizes": ["S", "M", "L"],
           "inStock": true,
+          "bestSeller": false,
+          "weekSale": false,
           "description": "Make a bold move in this color-blocked street-style tracksuit — perfect for chilling or hitting the pavement."
         }
       ]
     }
   ]
 }
-  

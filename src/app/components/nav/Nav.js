@@ -20,7 +20,7 @@ function Nav() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
 
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+      if (currentScrollY > lastScrollY && currentScrollY > 60) {
         setShowNav(false) // scrolling down
       } else {
         setShowNav(true) // scrolling up
@@ -46,7 +46,7 @@ function Nav() {
           <span className={styles.cart}>
             <Link href={'/cart'}>
               <ShoppingCartIcon sx={{ color: 'aliceblue' }} />
-              {totalItems}
+              <span className={styles.link_2}>{totalItems}</span>
             </Link>
           </span>
         </span>

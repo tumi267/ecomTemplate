@@ -1,7 +1,9 @@
 .cartPage {
     padding: 2em;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
   }
   
   .heading {
@@ -15,6 +17,14 @@
     font-weight: 600;
     margin-bottom: 2em;
     text-align: center;
+  }
+  .total_contain_box{
+    position: relative;
+  }
+  .total_contain{
+    position: sticky;
+    top:10%;
+    left: 5em;
   }
   
   .cartItems {
@@ -32,6 +42,7 @@
     border-radius: 8px;
     background-color: #fdfdfd;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    gap: 2em;
   }
   
   .itemInfo {
@@ -73,5 +84,10 @@
   .clearBtnWrapper {
     margin-top: 2em;
     text-align: center;
+  }
+  .image{
+    position: relative;
+    height: 100px;
+    width: 100px;
   }
   

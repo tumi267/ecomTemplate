@@ -8,13 +8,13 @@
   
 .card {
     border: 1px solid black;
-    min-height: 300px;
+    min-height: 500px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 1em;
-    background-color: #B2BEB5;
+    background-color: rgb(234, 238, 239,0.5);
     transition: transform 0.2s ease;
   }
   
@@ -92,4 +92,20 @@
     font-weight: bold;
     border-bottom: 2px solid #1f22254f;
   }
-  
+  .saleBadge {
+    background-color: #eee;
+    border: 1px solid;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    white-space: nowrap;
+  }
+  .optionBtn {
+    text-transform: capitalize;
+    padding-left: 1em;
+    padding-right: 1em;
+    border: 1px solid #222 ;
+
+  }

@@ -1,6 +1,6 @@
 .nav_contain{
 padding: 2em;
-background-color: #B2BEB5;
+background-color: var(--button-inverted, #000);
 position: sticky;
 transition: transform 0.6s ease;
 top: 0;
@@ -12,6 +12,11 @@ z-index: 10;
 }
 .link{
     font-size: 24px;
+    font-weight: 600;
+    color: aliceblue;
+}
+.link_2{
+    font-size: 16px;
     font-weight: 600;
     color: aliceblue;
 }

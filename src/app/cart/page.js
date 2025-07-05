@@ -5,6 +5,7 @@ import RemoveItem from '../components/RemoveCartItem/RemoveCartItem'
 import AddToCartButton from '../components/AddToCartButton/AddToCartButton'
 import ClearCart from '../components/ClearCart/ClearCart'
 import styles from './cart.module.css'
+import Image from 'next/image'
 
 function Cart() {
   const items = useCartStore((state) => state.items)
@@ -14,12 +15,11 @@ function Cart() {
 
   return (
     <div className={styles.cartPage}>
-      <h1 className={styles.heading}>Your Cart</h1>
-      <p className={styles.total}>Total Cost: R{totalCost}</p>
 
       <div className={styles.cartItems}>
         {items.map((e) => (
           <div className={styles.cartItem} key={e.id}>
+            <div className={styles.image}><Image src='/next.svg' alt={e.name} fill /></div>
             <div className={styles.itemInfo}>
               <p className={styles.itemName}>{e.name}</p>
               <p className={styles.itemQty}>Qty: {e.quantity}</p>
@@ -34,10 +34,16 @@ function Cart() {
           </div>
         ))}
       </div>
-
-      <div className={styles.clearBtnWrapper}>
-        <ClearCart />
+      <div className={styles.total_contain_box}>
+        <div className={styles.total_contain}>
+          <h1 className={styles.heading}>Your Cart</h1>
+          <p className={styles.total}>Total Cost: R{Math.floor(totalCost*100)/100}</p>
+        <div className={styles.clearBtnWrapper}>
+          <ClearCart />
+        </div>
+        </div>
       </div>
+
     </div>
   )
 }

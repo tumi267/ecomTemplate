@@ -1,24 +1,30 @@
 'use client'
 
 import { useCartStore } from '../../libs/store'
-
-export default function AddToCartButton({ product }) {
+import styles from './AddToCart.module.css'
+export default function AddToCartButton({ product,disabled = false }) {
   const addItem = useCartStore((state) => state.addItem)
   const items = useCartStore((state) => state.items)
-  const {id,name,price,description,image,inStock,colors,currency}=product
+  const {id,name,price,description,image,inStock,colors,sizes,currency}=product
+
+
+
   return (
     <button 
-      onClick={() => addItem({
-        id,
-        name,
-        price,
-        description,
-        image,
-        inStock,
-        currency,
-        colors,
-        quantity: 1
-      })}
+    disabled={disabled}
+    onClick={() => !disabled && addItem({
+      id,
+      name,
+      price,
+      description,
+      image,
+      inStock,
+      currency,
+      colors,
+      quantity: 1,
+      sizes
+    })}
+      className={`${styles.addToCartBtn} ${disabled ? styles.disabled : ''}`}
     >
       Add to bag 
     </button>

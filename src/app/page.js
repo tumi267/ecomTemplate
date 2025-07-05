@@ -16,10 +16,27 @@ export default function Home() {
     items={db.categories}
     prod={false}
     />
+    <Hero
+    src={'/next.svg'}
+    alt={'hero'}
+    />
     <ProductGrid
     title='Best Sellers'
     items={db.categories}
-    selector='Caps'
+    selector='best seller'
+    />
+    <Hero
+    src={'/next.svg'}
+    alt={'hero'}
+    />
+    <ProductGrid
+    title='weekly sale'
+    items={db.categories}
+    selector='week sale'
+    />
+    <Hero
+    src={'/next.svg'}
+    alt={'hero'}
     />
     </main>
   )
