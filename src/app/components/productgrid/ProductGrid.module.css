@@ -102,6 +102,10 @@
     margin-left: 8px;
     white-space: nowrap;
   }
+  .options{
+    display: flex;
+    gap: 0.5em;
+  }
   .optionBtn {
     text-transform: capitalize;
     padding-left: 1em;

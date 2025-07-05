@@ -6,6 +6,7 @@ import AddToCartButton from '../components/AddToCartButton/AddToCartButton'
 import ClearCart from '../components/ClearCart/ClearCart'
 import styles from './cart.module.css'
 import Image from 'next/image'
+import PayFastCheckoutButton from '../components/PayFastCheckoutButton/PayFastCheckoutButton'
 
 function Cart() {
   const items = useCartStore((state) => state.items)
@@ -40,6 +41,12 @@ function Cart() {
           <p className={styles.total}>Total Cost: R{Math.floor(totalCost*100)/100}</p>
         <div className={styles.clearBtnWrapper}>
           <ClearCart />
+        </div>
+        <div className={styles.clearBtnWrapper}>
+        <PayFastCheckoutButton
+        items={items} 
+        total={Math.floor(totalCost*100)/100} 
+        />
         </div>
         </div>
       </div>
