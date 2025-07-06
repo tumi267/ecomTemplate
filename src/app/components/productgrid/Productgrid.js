@@ -43,12 +43,13 @@ function ProductGrid({ title, items, selector, param }) {
 
   const updateVariant = (index, field, value) => {
     const variantValue = JSON.parse(value)
+    
     setVariants(prev => ({
       ...prev,
       [index]: {
         ...prev[index],
         [field]: variantValue,
-        variantInStock: variantValue.qty > 0
+        variantInStock: variantValue.trackQty === false || variantValue.qty > 0
       }
     }))
   }
@@ -79,16 +80,30 @@ function ProductGrid({ title, items, selector, param }) {
             (!requiresSize || selectedSize) &&
             (!requiresColor || selectedColor)
 
+          // Create selected variant with proper trackQty handling
           const selectedVariant = {
             ...product,
-            ...(requiresSize && { sizes: selectedSize }),
-            ...(requiresColor && { colors: selectedColor }),
+            ...(requiresSize && selectedSize && { 
+              sizes: {
+                ...selectedSize,
+                trackQty: selectedSize.trackQty !== undefined ? selectedSize.trackQty : true
+              }
+            }),
+            ...(requiresColor && selectedColor && { 
+              colors: {
+                ...selectedColor,
+                trackQty: selectedColor.trackQty !== undefined ? selectedColor.trackQty : true
+              }
+            }),
           }
 
+          // Only disable if:
+          // 1. Not all variants are selected OR
+          // 2. Selected variant tracks quantity AND is out of stock
           const shouldDisable = 
             !allVariantsSelected || 
-            (selectedSize && selectedSize.qty <= 0) || 
-            (selectedColor && selectedColor.qty <= 0)
+            (selectedSize?.trackQty !== false && selectedSize?.qty <= 0) || 
+            (selectedColor?.trackQty !== false && selectedColor?.qty <= 0)
 
           return (
             <Card key={index} className={styles.card}>
@@ -169,9 +184,6 @@ function ProductGrid({ title, items, selector, param }) {
               <AddToCartButton 
                 product={selectedVariant} 
                 disabled={shouldDisable}
-                variant={(isDisabled) => {
-                  // This callback can be used if needed
-                }}
               />
 
               <CardDescription className={styles.price}>R {product.price}</CardDescription>

@@ -15,10 +15,10 @@
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
           "sizes": [
-            {"size": "S", "qty": 0, "price": 199.99},
-            {"size": "M", "qty": 15, "price": 199.99},
-            {"size": "L", "qty": 8, "price": 199.99},
-            {"size": "XL", "qty": 5, "price": 219.99}
+            { "size": "S", "qty": 0, "price": 199.99, "trackQty": true },
+            { "size": "M", "qty": 15, "price": 199.99, "trackQty": true },
+            { "size": "L", "qty": 8, "price": 199.99, "trackQty": true },
+            { "size": "XL", "qty": 5, "price": 219.99, "trackQty": true }
           ],
           "inStock": true,
           "bestSeller": true,
@@ -33,9 +33,9 @@
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1602810316690-c9947c2b2494",
           "sizes": [
-            {"size": "S", "qty": 12, "price": 219.99},
-            {"size": "M", "qty": 7, "price": 219.99},
-            {"size": "L", "qty": 3, "price": 219.99}
+            { "size": "S", "qty": 12, "price": 219.99, "trackQty": true },
+            { "size": "M", "qty": 7, "price": 219.99, "trackQty": true },
+            { "size": "L", "qty": 3, "price": 219.99, "trackQty": true }
           ],
           "inStock": true,
           "bestSeller": false,
@@ -58,9 +58,9 @@
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1542062703-8eb4f2086d3d",
           "colors": [
-            {"color": "Black", "qty": 20, "price": 149.99},
-            {"color": "Red", "qty": 15, "price": 149.99},
-            {"color": "Navy", "qty": 10, "price": 149.99}
+            { "color": "Black", "qty": 20, "price": 149.99, "trackQty": true },
+            { "color": "Red", "qty": 15, "price": 149.99, "trackQty": true },
+            { "color": "Navy", "qty": 10, "price": 149.99, "trackQty": true }
           ],
           "inStock": true,
           "bestSeller": true,
@@ -75,8 +75,8 @@
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1565058528601-b57a47ab3aef",
           "colors": [
-            {"color": "White", "qty": 0, "price": 129.99},
-            {"color": "Grey", "qty": 2, "price": 129.99}
+            { "color": "White", "qty": 0, "price": 129.99, "trackQty": false },
+            { "color": "Grey", "qty": 2, "price": 129.99, "trackQty": true }
           ],
           "inStock": false,
           "bestSeller": false,
@@ -99,9 +99,9 @@
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1615900178302-25e3c005fdbb",
           "sizes": [
-            {"size": "M", "qty": 5, "price": 499.99},
-            {"size": "L", "qty": 8, "price": 499.99},
-            {"size": "XL", "qty": 3, "price": 519.99}
+            { "size": "M", "qty": 5, "price": 499.99, "trackQty": true },
+            { "size": "L", "qty": 8, "price": 499.99, "trackQty": true },
+            { "size": "XL", "qty": 3, "price": 519.99, "trackQty": true }
           ],
           "inStock": true,
           "bestSeller": true,
@@ -116,9 +116,9 @@
           "currency": "ZAR",
           "image": "https://images.unsplash.com/photo-1602810317523-f7094c3b92ed",
           "sizes": [
-            {"size": "S", "qty": 4, "price": 549.99},
-            {"size": "M", "qty": 6, "price": 549.99},
-            {"size": "L", "qty": 2, "price": 549.99}
+            { "size": "S", "qty": 4, "price": 549.99, "trackQty": true },
+            { "size": "M", "qty": 6, "price": 549.99, "trackQty": true },
+            { "size": "L", "qty": 2, "price": 549.99, "trackQty": true }
           ],
           "inStock": true,
           "bestSeller": false,

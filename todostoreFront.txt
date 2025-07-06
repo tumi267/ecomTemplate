@@ -1,6 +1,4 @@
-variant {
-   - if item has no qty enable btn
-}
+
 nav{
    - search
    -favourites

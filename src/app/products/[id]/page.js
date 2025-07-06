@@ -25,14 +25,18 @@ function Page() {
   const handleSizeChange = (e) => {
     e.preventDefault()
     setSelectedSize(JSON.parse(e.target.value))
-    
-    setVariantinStock(JSON.parse(e.target.value).qty)
+    if(JSON.parse(e.target.value).trackQty==true){
+      setVariantinStock(JSON.parse(e.target.value).qty)
+    }
+   
   }
 
   const handleColorChange = (e) => {
     e.preventDefault()
     setSelectedColor(JSON.parse(e.target.value))
-    setVariantinStock(JSON.parse(e.target.value).qty)
+    if(JSON.parse(e.target.value).trackQty==true){
+      setVariantinStock(JSON.parse(e.target.value).qty)
+    }
   }
 
   const requiresSize = Array.isArray(prodinfo?.sizes) && prodinfo.sizes.length > 0
