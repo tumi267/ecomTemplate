@@ -13,6 +13,8 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.2",
     "@mui/material": "^7.1.2",
+    "@neondatabase/serverless": "^1.0.1",
+    "@prisma/client": "^4.15.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
@@ -23,13 +25,20 @@
     "react-dom": "^18",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
+    "ws": "^8.18.3",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
+    "@types/node": "^16.18.126",
+    "@types/ws": "^8.18.1",
     "autoprefixer": "^10",
+    "bufferutil": "^4.0.9",
     "eslint": "^8",
     "eslint-config-next": "13.5.6",
     "postcss": "^8",
-    "tailwindcss": "^3"
+    "prisma": "^4.15.0",
+    "tailwindcss": "^3",
+    "tsx": "^3.12.7",
+    "typescript": "^5.8.3"
   }
 }

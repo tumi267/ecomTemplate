@@ -2,7 +2,7 @@
 import React from 'react'
 import styles from './Dawer.module.css'
 import Link from 'next/link'
-import { useMenuStore } from '@/app/libs/menu'
+import { useMenuStore } from '../../../app/libs/menu'
 
 function Dawer() {
   const isOpen = useMenuStore((s) => s.isOpen)

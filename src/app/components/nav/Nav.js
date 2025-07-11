@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './Nav.module.css'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCartStore } from '../../libs/store'
-import { useMenuStore } from '@/app/libs/menu';
+import { useMenuStore } from '../../../app/libs/menu';
 import MouseOverCart from '../mouseOverCart/MouseOverCart';
 
 function Nav() {

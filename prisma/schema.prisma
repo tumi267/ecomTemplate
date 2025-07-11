@@ -1,0 +1,142 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+// Use enum for currencies, add more as needed
+enum Currency {
+  ZAR
+  USD
+  EUR
+  GBP
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  image       String?
+  products    Product[]
+}
+
+model Product {
+  id                     String    @id @default(uuid())
+  sku                    String?   @unique  // SKU or barcode for inventory
+  categoryId             String
+  category               Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  name                   String
+  description            String
+  imagePath              String
+
+  currency               Currency  @default(ZAR)
+
+  isAvailableForPurchase Boolean   @default(true)
+  bestSeller             Boolean   @default(false)
+  weekSale               Boolean   @default(false)
+
+  price                  Decimal   // base price
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  variants               Variant[]
+  orders                 Order[]
+}
+
+model Variant {
+  id          String   @id @default(uuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  type        String   // e.g. "size" or "color"
+  label       String   // e.g. "M", "L", "Black", etc.
+  price       Decimal  // can differ from base product price
+  qty         Int
+  trackQty    Boolean
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  cartItems   CartItem[]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+
+  // Optional user address for shipping
+  addressLine1  String?
+  addressLine2  String?
+  city          String?
+  province      String?
+  postalCode    String?
+  country       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+  carts     Cart[]
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  userId     String
+  productId  String
+  price      Decimal
+
+  status     OrderStatus  @default(PENDING)
+
+  shippingAddressLine1  String?
+  shippingAddressLine2  String?
+  shippingCity          String?
+  shippingProvince      String?
+  shippingPostalCode    String?
+  shippingCountry       String?
+
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Restrict)
+}
+
+// Shopping cart per user
+model Cart {
+  id        String      @id @default(uuid())
+  userId    String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+}
+
+model CartItem {
+  id          String    @id @default(uuid())
+  cartId      String
+  variantId   String
+  quantity    Int       @default(1)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  cart        Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant     Variant   @relation(fields: [variantId], references: [id], onDelete: Restrict)
+}

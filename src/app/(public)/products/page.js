@@ -1,9 +1,9 @@
 
 'use client'
 import Image from 'next/image'
-import db from '../libs/db.json'
-import ProductGrid from '../components/productgrid/Productgrid'
-import ProductFillter from '../components/productFilter/ProductFillter'
+import db from '../../libs/db.json'
+import ProductGrid from '../../components/productgrid/Productgrid'
+import ProductFillter from '../../components/productFilter/ProductFillter'
 import { useEffect, useState } from 'react'
 
 function Product() {

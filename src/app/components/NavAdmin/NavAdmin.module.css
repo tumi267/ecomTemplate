@@ -1,0 +1,12 @@
+.contain{
+    height: 120px;
+    display: flex;
+    background-color: blue;
+    justify-content: center;
+    gap: 1.5em;
+    align-items: center;
+}
+.links{
+    color: aliceblue;
+    
+}

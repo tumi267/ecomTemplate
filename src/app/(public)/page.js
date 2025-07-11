@@ -1,10 +1,12 @@
 import Image from 'next/image'
-import db from './libs/db.json'
-import Hero from './components/hero/Hero'
-import ClassicGrid from './components/classicgrid/ClassicGrid'
-import ProductGrid from './components/productgrid/Productgrid'
-export default function Home() {
-
+import db from '../libs/db.json'
+import Hero from '../components/hero/Hero'
+import ClassicGrid from '../components/classicgrid/ClassicGrid'
+import ProductGrid from '../components/productgrid/Productgrid'
+import { getCategory } from '../libs/category'
+export default async function Home() {
+ const categories =await getCategory()
+ console.log(categories)
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <Hero

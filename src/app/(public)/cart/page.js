@@ -1,12 +1,12 @@
 'use client'
 import React from 'react'
-import { useCartStore } from '../libs/store'
-import RemoveItem from '../components/RemoveCartItem/RemoveCartItem'
-import AddToCartButton from '../components/AddToCartButton/AddToCartButton'
-import ClearCart from '../components/ClearCart/ClearCart'
+import { useCartStore } from '../../libs/store'
+import RemoveItem from '../../components/RemoveCartItem/RemoveCartItem'
+import AddToCartButton from '../../components/AddToCartButton/AddToCartButton'
+import ClearCart from '../../components/ClearCart/ClearCart'
 import styles from './cart.module.css'
 import Image from 'next/image'
-import PayFastCheckoutButton from '../components/PayFastCheckoutButton/PayFastCheckoutButton'
+import PayFastCheckoutButton from '../../components/PayFastCheckoutButton/PayFastCheckoutButton'
 
 function Cart() {
   const items = useCartStore((state) => state.items)

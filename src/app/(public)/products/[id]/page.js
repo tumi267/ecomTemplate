@@ -2,9 +2,9 @@
 
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import db from '../../libs/db.json'
-import { Button } from '../../../components/ui/button'
-import AddToCartButton from '@/app/components/AddToCartButton/AddToCartButton'
+import db from '../../../libs/db.json'
+import { Button } from '../../../../components/ui/button'
+import AddToCartButton from '../../../components/AddToCartButton/AddToCartButton'
 import styles from './product.module.css'
 
 function Page() {

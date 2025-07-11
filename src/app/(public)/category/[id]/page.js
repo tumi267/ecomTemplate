@@ -1,9 +1,9 @@
 'use client'
-import ProductGrid from '@/app/components/productgrid/Productgrid'
+import ProductGrid from '../../../components/productgrid/Productgrid'
 import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
-import db from '../../libs/db.json'
-import ProductFillter from '../../components/productFilter/ProductFillter'
+import db from '../../../libs/db.json'
+import ProductFillter from '../../../components/productFilter/ProductFillter'
 function CategoryPage() {
     const params = useParams()
     

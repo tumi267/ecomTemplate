@@ -2,7 +2,7 @@
 'use client'
 import React from 'react'
 import styles from './MouseOverCart.module.css'
-import { useCartStore } from '@/app/libs/store'
+import { useCartStore } from '../../../app/libs/store'
 
 
 function MouseOverCart() {
