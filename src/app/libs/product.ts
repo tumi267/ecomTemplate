@@ -10,6 +10,66 @@ export async function getProducts() {
     },
   })
 }
+// get single product
+export async function getSingleProduct(id: string) {
+  return await prisma.product.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      category: true,
+      variants: true,
+    },
+  })
+}
+
+
+// get all category products
+
+export async function getProductsByCategory(categoryId: string) {
+  if (!categoryId) {
+    throw new Error('Missing required categoryId')
+  }
+
+  return await prisma.product.findMany({
+    where: {
+      categoryId,
+    },
+    include: {
+      category: true,
+      variants: true,
+    },
+  })
+}
+
+
+// get all product where best seller == true
+export async function getBestSellers() {
+  return await prisma.product.findMany({
+    where: {
+      bestSeller: true,
+    },
+    include: {
+      category: true,
+      variants: true,
+    },
+  })
+}
+
+// 
+// get all prooducts where weeklysale == true
+export async function getWeekSales() {
+  return await prisma.product.findMany({
+    where: {
+      weekSale: true,
+    },
+    include: {
+      category: true,
+      variants: true,
+    },
+  })
+}
+
 
 // Create a product
 export async function createProduct(data: {

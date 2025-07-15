@@ -1,132 +1,129 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import db from '../../../libs/db.json'
 import { Button } from '../../../../components/ui/button'
 import AddToCartButton from '../../../components/AddToCartButton/AddToCartButton'
 import styles from './product.module.css'
+import { getSingleProduct } from '../../../utils/admincalls'
 
 function Page() {
-  const params = useParams()
-  const regex = (text) => decodeURIComponent(text)
-
-  const [prodinfo, setprodinfo] = useState({})
-  const [selectedSize, setSelectedSize] = useState(null)
-  const [selectedColor, setSelectedColor] = useState(null)
-  const [VariantinStock,setVariantinStock]=useState(null)
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
+  const [prodinfo, setProdinfo] = useState({})
+  const [selectedVariants, setSelectedVariants] = useState({})
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const items = db.categories.flatMap((e) => e.items)
-    const item = items.find((e) => e.name === regex(params.id))
-    setprodinfo(item || {})
-  }, [params])
-
-  const handleSizeChange = (e) => {
-    e.preventDefault()
-    setSelectedSize(JSON.parse(e.target.value))
-    if(JSON.parse(e.target.value).trackQty==true){
-      setVariantinStock(JSON.parse(e.target.value).qty)
+    const fetchProduct = async () => {
+      if (!id) return
+      try {
+        const res = await getSingleProduct(id)
+        setProdinfo(res)
+      } catch (err) {
+        console.error('Failed to load product', err)
+      } finally {
+        setLoading(false)
+      }
     }
-   
-  }
+    fetchProduct()
+  }, [id])
 
-  const handleColorChange = (e) => {
-    e.preventDefault()
-    setSelectedColor(JSON.parse(e.target.value))
-    if(JSON.parse(e.target.value).trackQty==true){
-      setVariantinStock(JSON.parse(e.target.value).qty)
-    }
-  }
-
-  const requiresSize = Array.isArray(prodinfo?.sizes) && prodinfo.sizes.length > 0
-  const requiresColor = Array.isArray(prodinfo?.colors) && prodinfo.colors.length > 0
-
-  const isReadyToAdd =
-    (!requiresSize || selectedSize) &&
-    (!requiresColor || selectedColor)
+  const uniqueTypes = [...new Set(prodinfo.variants?.map(v => v.type))]
+  const allSelected = uniqueTypes.every(type => selectedVariants[type])
+  const isOutOfStock = uniqueTypes.some(type => {
+    const selected = selectedVariants[type]
+    return selected?.trackQty !== false && selected?.qty <= 0
+  })
 
   const selectedVariant = {
     ...prodinfo,
-    ...(requiresSize && { sizes: selectedSize }),
-    ...(requiresColor && { colors: selectedColor }),
+    ...uniqueTypes.reduce((acc, type) => {
+      const selected = selectedVariants[type]
+      if (selected) {
+        acc[type] = {
+          ...selected,
+          trackQty: selected.trackQty !== undefined ? selected.trackQty : true,
+        }
+      }
+      return acc
+    }, {})
   }
 
-  const hasVariants = requiresSize || requiresColor
-  const allVariantsSelected = isReadyToAdd
-  const disableAddToCart = hasVariants && !allVariantsSelected
+  const updateVariant = (type, valueStr) => {
+    const variantValue = JSON.parse(valueStr)
+    setSelectedVariants(prev => ({
+      ...prev,
+      [type]: variantValue,
+    }))
+  }
+
+  const disableAddToCart = !allSelected || isOutOfStock
+
+  if (loading) return <p>Loading...</p>
+  if (!prodinfo?.id) return <p>Product not found.</p>
 
   return (
     <div className={styles.productPage}>
       <div className={styles.productGrid}>
         {/* Image */}
         <div className={styles.imageBox}>
-        {VariantinStock >0 || VariantinStock === null ?
-          <img src="/next.svg" alt={prodinfo.name} className={styles.image} />
-          :<h2>out of stock</h2>}
+          {isOutOfStock ? (
+            <h2>Out of Stock</h2>
+          ) : (
+            <img src="/next.svg" alt={prodinfo.name} className={styles.image} />
+          )}
         </div>
 
         {/* Details */}
         <div className={styles.detailsBox}>
           <section className={styles.section}>
-            <h1 className={styles.title}>{regex(params.id)}</h1>
-          </section>
-          {/* can be a accordian */}
-          <section className={styles.section}>
-            <h4>{prodinfo?.description}</h4>
+            <h1 className={styles.title}>{prodinfo.name}</h1>
           </section>
 
           <section className={styles.section}>
-            <h3>Price: <span>R {prodinfo?.price}</span></h3>
+            <h4>{prodinfo.description}</h4>
           </section>
 
-          {/* Size Selector (if sizes exist) */}
-          {requiresSize && (
-            <section className={styles.section}>
-              <h3>Sizes</h3>
-              <div className={styles.options}>
-                {prodinfo.sizes.map((size, i) => {
-                  const sizeStr = JSON.stringify(size)
-                  const selectedStr = JSON.stringify(selectedSize)
-                  return (
-                    <Button
-                      key={i}
-                      variant="outline"
-                      value={sizeStr}
-                      onClick={handleSizeChange}
-                      className={`${styles.optionBtn} ${selectedStr === sizeStr ? styles.active : ''}`}
-                    >
-                      {size.size}
-                    </Button>
-                  )
-                })}
-              </div>
-            </section>
-          )}
+          <section className={styles.section}>
+            <h3>Price: <span>R {prodinfo.price}</span></h3>
+          </section>
 
-          {/* Color Selector (if colors exist) */}
-          {requiresColor && (
-            <section className={styles.section}>
-              <h3>Colors</h3>
+          {/* Variant Selectors */}
+          {uniqueTypes.map((type) => (
+            <section className={styles.section} key={type}>
+              <h3>{type}</h3>
               <div className={styles.options}>
-                {prodinfo.colors.map((color, i) => {
-                  const colorStr = JSON.stringify(color)
-                  const selectedStr = JSON.stringify(selectedColor)
-                  return (
-                    <Button
-                      key={i}
-                      variant="outline"
-                      value={colorStr}
-                      onClick={handleColorChange}
-                      className={`${styles.optionBtn} ${selectedStr === colorStr ? styles.active : ''}`}
-                    >
-                      {color.color}
-                    </Button>
-                  )
-                })}
+                {prodinfo.variants
+                  .filter(v => v.type === type)
+                  .sort((a, b) => {
+                    if (type.toLowerCase() !== 'size') return 0
+                    const order = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+                    const indexA = order.indexOf(a.label.toUpperCase())
+                    const indexB = order.indexOf(b.label.toUpperCase())
+                    return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB)
+                  })
+                  .map((variant, i) => {
+                    const valueStr = JSON.stringify(variant)
+                    const selectedStr = JSON.stringify(selectedVariants[type] || {})
+                    return (
+                      <Button
+                        key={i}
+                        variant="outline"
+                        value={valueStr}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          updateVariant(type, valueStr)
+                        }}
+                        className={`${styles.optionBtn} ${selectedStr === valueStr ? styles.active : ''}`}
+                      >
+                        {variant.label}
+                      </Button>
+                    )
+                  })}
               </div>
             </section>
-          )}
+          ))}
 
           {/* Add to Cart */}
           <div className={styles.cartBtn}>

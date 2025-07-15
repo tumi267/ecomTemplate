@@ -14,23 +14,23 @@ import styles from './ProductGrid.module.css'
 import Link from 'next/link.js'
 import AddToCartButton from '../AddToCartButton/AddToCartButton.js'
 
-function ProductGrid({ title, items, selector, param }) {
-  const [cardinfo, setcardinfo] = useState([])
 
+function ProductGrid({ title, items, selector, param ,categories}) {
+  const [cardinfo, setcardinfo] = useState([])
+ 
   useEffect(() => {
     if (selector && selector.toLowerCase() === "best seller") {
-      const bestSellers = items.flatMap(cat => cat.items).filter(item => item.bestSeller === true)
-      setcardinfo(bestSellers)
+      setcardinfo(items)
     } else if (selector && selector.toLowerCase() === "week sale") {
-      const weekSales = items.flatMap(cat => cat.items).filter(item => item.weekSale === true)
-      setcardinfo(weekSales)
+      setcardinfo(items)
     } else if (selector) {
       const seller = items.find(e => e.name === selector)
-      setcardinfo(seller?.items)
+      setcardinfo(seller?.items || [])
     } else {
       setcardinfo(items)
     }
   }, [items, selector])
+
 
   const regex = (text, numWords) => {
     if (!text) return ''
@@ -38,17 +38,15 @@ function ProductGrid({ title, items, selector, param }) {
     return words.slice(0, numWords).join(' ') + (words.length > numWords ? '...' : '')
   }
 
-  // Store selected variants per product index
   const [variants, setVariants] = useState({})
 
-  const updateVariant = (index, field, value) => {
+  const updateVariant = (index, type, value) => {
     const variantValue = JSON.parse(value)
-    
     setVariants(prev => ({
       ...prev,
       [index]: {
         ...prev[index],
-        [field]: variantValue,
+        [type]: variantValue,
         variantInStock: variantValue.trackQty === false || variantValue.qty > 0
       }
     }))
@@ -61,60 +59,52 @@ function ProductGrid({ title, items, selector, param }) {
       {param !== undefined && (
         <ul className={styles.navList}>
           <li><Link href="/products" className={param === 1 ? styles.active : ''}>Products</Link></li>
-          <li><Link href="/category/T-Shirts" className={param === 'T-Shirts' ? styles.active : ''}>T-Shirts</Link></li>
-          <li><Link href="/category/Caps" className={param === 'Caps' ? styles.active : ''}>Caps</Link></li>
-          <li><Link href="/category/Tracksuits" className={param === 'Tracksuits' ? styles.active : ''}>Tracksuits</Link></li>
+          {categories?.map((e)=>{
+            return<li key={e.id}>
+              <Link href={`/category/${e.name}?id=${e.id}`} className={param === e.name ? styles.active : ''}>{e.name}</Link>
+            </li>
+          })}
         </ul>
       )}
 
       <div className={styles.card_contain}>
         {cardinfo?.map((product, index) => {
-          const requiresSize = Array.isArray(product.sizes) && product.sizes.length > 0
-          const requiresColor = Array.isArray(product.colors) && product.colors.length > 0
+          const uniqueTypes = [...new Set(product.variants?.map(v => v.type))]
 
-          const selectedSize = variants[index]?.selectedSize || null
-          const selectedColor = variants[index]?.selectedColor || null
-          const variantInStock = variants[index]?.variantInStock
+          const selectedVariantState = variants[index] || {}
+          const allSelected = uniqueTypes.every(type => selectedVariantState[type])
 
-          const allVariantsSelected = 
-            (!requiresSize || selectedSize) &&
-            (!requiresColor || selectedColor)
-
-          // Create selected variant with proper trackQty handling
           const selectedVariant = {
             ...product,
-            ...(requiresSize && selectedSize && { 
-              sizes: {
-                ...selectedSize,
-                trackQty: selectedSize.trackQty !== undefined ? selectedSize.trackQty : true
+            ...uniqueTypes.reduce((acc, type) => {
+              const selected = selectedVariantState[type]
+              if (selected) {
+                acc[type] = {
+                  ...selected,
+                  trackQty: selected.trackQty !== undefined ? selected.trackQty : true
+                }
               }
-            }),
-            ...(requiresColor && selectedColor && { 
-              colors: {
-                ...selectedColor,
-                trackQty: selectedColor.trackQty !== undefined ? selectedColor.trackQty : true
-              }
-            }),
+              return acc
+            }, {})
           }
 
-          // Only disable if:
-          // 1. Not all variants are selected OR
-          // 2. Selected variant tracks quantity AND is out of stock
-          const shouldDisable = 
-            !allVariantsSelected || 
-            (selectedSize?.trackQty !== false && selectedSize?.qty <= 0) || 
-            (selectedColor?.trackQty !== false && selectedColor?.qty <= 0)
+          const isOutOfStock = uniqueTypes.some(type => {
+            const selected = selectedVariantState[type]
+            return selected?.trackQty !== false && selected?.qty <= 0
+          })
+
+          const shouldDisable = !allSelected || isOutOfStock
 
           return (
             <Card key={index} className={styles.card}>
-              <Link href={`/products/${product.name}`} className={styles.link}>
+              <Link href={`/products/${product.name}?id=${product.id}`} className={styles.link}>
                 <CardHeader>
                   <CardTitle className={styles.cardTitle}>{product.name}</CardTitle>
                   {product.weekSale && <span className={styles.saleBadge}>On Sale</span>}
                 </CardHeader>
                 <CardContent>
                   <div className={styles.image_wrapper}>
-                    {variantInStock !== false ? (
+                    {selectedVariantState?.variantInStock !== false ? (
                       <Image src='/next.svg' alt={product.name} fill />
                     ) : (
                       <div className={styles.outOfStockOverlay}>Out of Stock</div>
@@ -127,62 +117,44 @@ function ProductGrid({ title, items, selector, param }) {
                 {regex(product.description, 7)}
               </CardDescription>
 
-              {/* Size selector */}
-              {requiresSize && (
-                <div className={styles.variantSection}>
-                  <p className={styles.variantLabel}>Size</p>
+              {/* Variant Selector */}
+              {uniqueTypes.map((type) => (
+                <div className={styles.variantSection} key={type}>
+                  <p className={styles.variantLabel}>{type}</p>
                   <div className={styles.options}>
-                    {product.sizes.map((size, i) => {
-                      const sizeStr = JSON.stringify(size)
-                      const selectedStr = selectedSize ? JSON.stringify(selectedSize) : ''
-                      return (
-                        <Button
-                          key={i}
-                          value={sizeStr}
-                          onClick={(e) => {
-                            e.preventDefault()
-                            updateVariant(index, 'selectedSize', sizeStr)
-                          }}
-                          className={`${styles.optionBtn} ${selectedStr === sizeStr ? styles.active : ''}`}
-                          variant="outline"
-                        >
-                          {size.size}
-                        </Button>
-                      )
-                    })}
+                    {product.variants
+                      .filter(v => v.type === type)
+                      .sort((a, b) => {
+                        if (type.toLowerCase() !== 'size') return 0
+                        const order = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+                        const indexA = order.indexOf(a.label.toUpperCase())
+                        const indexB = order.indexOf(b.label.toUpperCase())
+                        return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB)
+                      })
+                      .map((variant, i) => {
+                        const valueStr = JSON.stringify(variant)
+                        const selectedStr = JSON.stringify(selectedVariantState[type] || {})
+                        return (
+                          <Button
+                            key={i}
+                            value={valueStr}
+                            onClick={(e) => {
+                              e.preventDefault()
+                              updateVariant(index, type, valueStr)
+                            }}
+                            className={`${styles.optionBtn} ${selectedStr === valueStr ? styles.active : ''}`}
+                            variant="outline"
+                          >
+                            {variant.label}
+                          </Button>
+                        )
+                      })}
                   </div>
                 </div>
-              )}
+              ))}
 
-              {/* Color selector */}
-              {requiresColor && (
-                <div className={styles.variantSection}>
-                  <p className={styles.variantLabel}>Color</p>
-                  <div className={styles.options}>
-                    {product.colors.map((color, i) => {
-                      const colorStr = JSON.stringify(color)
-                      const selectedStr = selectedColor ? JSON.stringify(selectedColor) : ''
-                      return (
-                        <Button
-                          key={i}
-                          value={colorStr}
-                          onClick={(e) => {
-                            e.preventDefault()
-                            updateVariant(index, 'selectedColor', colorStr)
-                          }}
-                          className={`${styles.optionBtn} ${selectedStr === colorStr ? styles.active : ''}`}
-                          variant="outline"
-                        >
-                          {color.color}
-                        </Button>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
-
-              <AddToCartButton 
-                product={selectedVariant} 
+              <AddToCartButton
+                product={selectedVariant}
                 disabled={shouldDisable}
               />
 

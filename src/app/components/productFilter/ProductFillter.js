@@ -1,12 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 
-function ProductFillter({ items, setFilterd }) {
-  const categories = [
-    { id: 'cat001', name: 'T-Shirts' },
-    { id: 'cat002', name: 'Caps' },
-    { id: 'cat003', name: 'Tracksuits' }
-  ]
+function ProductFillter({ items, setFilterd,categories }) {
+
 
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedPrice, setSelectedPrice] = useState('')

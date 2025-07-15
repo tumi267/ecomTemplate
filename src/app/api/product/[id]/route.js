@@ -1,6 +1,24 @@
 import { NextResponse } from 'next/server'
-import { updateProduct, deleteProduct } from '../../../libs/product'
+import { updateProduct, deleteProduct, getSingleProduct } from '../../../libs/product'
 
+
+export async function GET(req,
+ { params}){
+  const { id } = params
+
+  try {
+    const product = await getSingleProduct(id)
+
+    if (!product) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+    }
+
+    return NextResponse.json(product)
+  } catch (err) {
+    console.error(err)
+    return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 })
+  } 
+}
 export async function PUT(req, { params }) {
   const body = await req.json()
   const { id } = params

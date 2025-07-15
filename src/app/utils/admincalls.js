@@ -32,7 +32,16 @@ const addcategory=async(name, description)=>{
     const res = await fetch('/api/product')
     return res.json()
   }
+
+async function getSingleProduct(id){
+  const res =await fetch(`/api/product/${id}`)
+  return res.json()
+}
   
+  async function fetchcategory() {
+    const res = await fetch('/api/getcategories')
+    return res.json()
+  }
    async function addProduct(data) {
     const res = await fetch('/api/addproduct', {
       method: 'POST',
@@ -96,6 +105,16 @@ const removeVariant = async (id) => {
   return res.json()
 }
 
+const getProductsByCategory = async (id) => {
+  const res = await fetch(`/api/getProductByCategory`,{
+    method:'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:JSON.stringify(id)
+  })
+  if (!res.ok) throw new Error('Failed to update variant')
+  return res.json()
+}
+
 export {
   addcategory,
   updatecategory,
@@ -107,4 +126,7 @@ export {
   addVariant,
   editVariant,
   removeVariant,
+  getProductsByCategory,
+  fetchcategory,
+  getSingleProduct,
 }

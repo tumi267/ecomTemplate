@@ -19,7 +19,7 @@ function ClassicGrid({title,items}) {
         {items.map((e,i)=>{
         return<Card key={i} className={styles.card}>
           <div className={styles.overlay}/>
-          <Link className={styles.card_link} href={`/category/${e.name}`}>
+          <Link className={styles.card_link} href={`/category/${e.name}?id=${e.id}`}>
           <div className={styles.image_wrapper}>
           <Image src='/next.svg' alt={e.name} fill />
           <CardTitle className={styles.cardTitle}>{e.name}</CardTitle>

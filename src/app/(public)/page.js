@@ -4,9 +4,12 @@ import Hero from '../components/hero/Hero'
 import ClassicGrid from '../components/classicgrid/ClassicGrid'
 import ProductGrid from '../components/productgrid/Productgrid'
 import { getCategory } from '../libs/category'
+import { getBestSellers, getWeekSales } from '../libs/product'
 export default async function Home() {
  const categories =await getCategory()
- console.log(categories)
+ const bestSellers =await getBestSellers()
+ const weekSale = await getWeekSales()
+ 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <Hero
@@ -15,7 +18,7 @@ export default async function Home() {
     />
     <ClassicGrid
     title='Categories'
-    items={db.categories}
+    items={categories}
     prod={false}
     />
     <Hero
@@ -24,7 +27,7 @@ export default async function Home() {
     />
     <ProductGrid
     title='Best Sellers'
-    items={db.categories}
+    items={bestSellers}
     selector='best seller'
     />
     <Hero
@@ -33,7 +36,7 @@ export default async function Home() {
     />
     <ProductGrid
     title='weekly sale'
-    items={db.categories}
+    items={weekSale}
     selector='week sale'
     />
     <Hero
