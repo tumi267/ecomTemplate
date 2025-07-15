@@ -30,8 +30,8 @@ function NavAdmin() {
       }, [lastScrollY])
   return (
  
-        <ul className={styles.contain}>{links.map((e)=>{
-        return <li>
+        <ul className={styles.contain}>{links.map((e,i)=>{
+        return <li key={i}>
             <Link className={styles.links} href={e=='dashboard'?'/admin':`/admin/${e}`}>{e.toUpperCase()}</Link>
             </li>
     })}
