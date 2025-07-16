@@ -10,6 +10,8 @@ export default function AddProduct({ onSuccess }) {
     description: '',
     price: '',
     categoryId: '',
+    qty: '',
+    trackQty: true,
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -28,7 +30,12 @@ export default function AddProduct({ onSuccess }) {
   }, [])
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    const { name, value } = e.target
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === 'trackQty' ? value === 'true' : value
+    }))
   }
 
   const handleSubmit = async (e) => {
@@ -37,17 +44,27 @@ export default function AddProduct({ onSuccess }) {
     setError(null)
 
     try {
-      await addProduct(formData)
+      const payload = {
+        ...formData,
+        price: parseFloat(formData.price),
+        qty: parseInt(formData.qty),
+      }
+
+      await addProduct(payload)
+
       setFormData({
         name: '',
         description: '',
         price: '',
         categoryId: '',
+        qty: '',
+        trackQty: true,
       })
+
       setTimeout(() => {
         onSuccess && onSuccess()
         setLoading(false)
-      }, 4000) // 500ms delay for better UX feedback
+      }, 400)
     } catch (err) {
       setError(err.message || 'Unknown error')
       setLoading(false)
@@ -56,7 +73,7 @@ export default function AddProduct({ onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit} className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-      {error && <div className="text-red-600">{error}</div>}
+      {error && <div className="text-red-600 col-span-full">{error}</div>}
 
       <input
         type="text"
@@ -89,6 +106,26 @@ export default function AddProduct({ onSuccess }) {
         className="border px-3 py-2 rounded"
       />
 
+      <input
+        type="number"
+        name="qty"
+        placeholder="Quantity"
+        value={formData.qty}
+        onChange={handleChange}
+        required
+        className="border px-3 py-2 rounded"
+      />
+
+      <select
+        name="trackQty"
+        value={formData.trackQty}
+        onChange={handleChange}
+        className="border px-3 py-2 rounded"
+      >
+        <option value="true">Track Quantity</option>
+        <option value="false">Don't Track Quantity</option>
+      </select>
+
       <select
         name="categoryId"
         value={formData.categoryId}
@@ -96,9 +133,7 @@ export default function AddProduct({ onSuccess }) {
         required
         className="border px-3 py-2 rounded"
       >
-        <option value="" disabled>
-          Select Category
-        </option>
+        <option value="" disabled>Select Category</option>
         {categories.map((cat) => (
           <option key={cat.id} value={cat.id}>
             {cat.name}
@@ -109,11 +144,10 @@ export default function AddProduct({ onSuccess }) {
       <button
         type="submit"
         disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded col-span-1 md:col-span-2"
+        className="bg-blue-600 text-white px-4 py-2 rounded col-span-full"
       >
         {loading ? 'Adding...' : 'Add Product'}
       </button>
     </form>
   )
 }
-

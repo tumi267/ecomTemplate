@@ -48,7 +48,7 @@ async function getSingleProduct(id){
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     })
-    return res.json()
+    return data
   }
   
    async function editProduct(id, data) {

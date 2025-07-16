@@ -1,7 +1,11 @@
 import prisma from './prisma'
 //  get all category
 export async function getCategory() {
-    return await prisma.category.findMany()
+    return await prisma.category.findMany(
+      {include: {
+        products: true, // ✅ include products
+      }}
+    )
 }
 // create categoy
 export async function createCategory(data: {

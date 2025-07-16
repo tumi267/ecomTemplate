@@ -72,53 +72,66 @@ export async function getWeekSales() {
 
 
 // Create a product
+// Create a product
 export async function createProduct(data: {
-    name: string
-    description: string
-    imagePath?: string  // optional now
-    sku?: string
-    categoryId: string
-    currency?: 'ZAR' | 'USD' | 'EUR' | 'GBP'
-    isAvailableForPurchase?: boolean
-    bestSeller?: boolean
-    weekSale?: boolean
-    price: Prisma.Decimal | string | number
-  }) {
-    // Validate required fields
-    if (!data.name || !data.description || !data.categoryId || !data.price) {
-      throw new Error('Missing required product fields')
-    }
-  
-    // Convert price safely
-    let priceDecimal
-    try {
-      priceDecimal = new Prisma.Decimal(data.price)
-    } catch {
-      throw new Error('Invalid price format')
-    }
-  
-    return await prisma.product.create({
-      data: {
-        ...data,
-        price: priceDecimal,
-        imagePath: data.imagePath || '', // provide default empty string if optional
-      },
-    })
-  }
-// Update a product
-export async function updateProduct(id: string, data: {
-  name?: string
-  description?: string
+  name: string
+  description: string
   imagePath?: string
   sku?: string
-  categoryId?: string
+  categoryId: string
   currency?: 'ZAR' | 'USD' | 'EUR' | 'GBP'
   isAvailableForPurchase?: boolean
   bestSeller?: boolean
   weekSale?: boolean
-  price?: Prisma.Decimal | string | number
+  price: Prisma.Decimal | string | number
+  qty: number
+  trackQty: boolean
 }) {
-  const updateData = { ...data }
+  if (
+    !data.name ||
+    !data.description ||
+    !data.categoryId ||
+    data.price === undefined ||
+    data.qty === undefined ||
+    data.trackQty === undefined
+  ) {
+    throw new Error('Missing required product fields')
+  }
+
+  let priceDecimal
+  try {
+    priceDecimal = new Prisma.Decimal(data.price)
+  } catch {
+    throw new Error('Invalid price format')
+  }
+
+  return await prisma.product.create({
+    data: {
+      ...data,
+      price: priceDecimal,
+      imagePath: data.imagePath || '',
+    },
+  })
+}
+// Update a product
+export async function updateProduct(
+  id: string,
+  data: {
+    name?: string
+    description?: string
+    imagePath?: string
+    sku?: string
+    categoryId?: string
+    currency?: 'ZAR' | 'USD' | 'EUR' | 'GBP'
+    isAvailableForPurchase?: boolean
+    bestSeller?: boolean
+    weekSale?: boolean
+    price?: Prisma.Decimal | string | number
+    qty?: number
+    trackQty?: boolean
+  }
+) {
+  const updateData: any = { ...data }
 
   // Ensure price is a Decimal if provided
   if (updateData.price !== undefined) {
@@ -166,13 +179,12 @@ export async function getVariantById(id: string) {
 // ✅ Create a variant
 export async function createVariant(data: {
   productId: string
-  type: string
-  label: string
+  options: Record<string, string> // e.g. { size: "S", color: "Red" }
   price: Prisma.Decimal | string | number
   qty: number
   trackQty: boolean
 }) {
-  if (!data.productId || !data.type || !data.label || data.price === undefined) {
+  if (!data.productId || !data.options || data.price === undefined || data.qty === undefined || data.trackQty === undefined) {
     throw new Error('Missing required variant fields')
   }
 
@@ -185,21 +197,23 @@ export async function createVariant(data: {
 
   return await prisma.variant.create({
     data: {
-      ...data,
+      productId: data.productId,
+      options: data.options,
       price: priceDecimal,
+      qty: data.qty,
+      trackQty: data.trackQty,
     },
   })
 }
 
 // ✅ Update a variant
 export async function updateVariant(id: string, data: {
-  type?: string
-  label?: string
+  options?: Record<string, string>
   price?: Prisma.Decimal | string | number
   qty?: number
   trackQty?: boolean
 }) {
-  const updateData = { ...data }
+  const updateData: any = { ...data }
 
   if (updateData.price !== undefined) {
     updateData.price = new Prisma.Decimal(updateData.price)

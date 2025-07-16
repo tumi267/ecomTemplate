@@ -55,7 +55,8 @@ model Product {
   price                  Decimal   // base price
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
-
+  qty                    Int
+  trackQty               Boolean
   variants               Variant[]
   orders                 Order[]
 }
@@ -65,8 +66,7 @@ model Variant {
   productId   String
   product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  type        String   // e.g. "size" or "color"
-  label       String   // e.g. "M", "L", "Black", etc.
+  options      Json
   price       Decimal  // can differ from base product price
   qty         Int
   trackQty    Boolean

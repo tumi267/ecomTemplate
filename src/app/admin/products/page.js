@@ -56,6 +56,7 @@ function Products() {
 
 export default Products
 
+// ✅ Updated renderCard for dynamic options
 const renderCard = (product, onEditToggle, fetchProducts, editVariantId, setEditVariantId) => {
   const inStock = product.variants?.some(
     (v) => v.trackQty === false || v.qty > 0
@@ -85,6 +86,7 @@ const renderCard = (product, onEditToggle, fetchProducts, editVariantId, setEdit
           R {product.price}
         </CardDescription>
 
+        {/* ✅ Dynamic Variant Listing */}
         {product.variants && product.variants.length > 0 && (
           <ul className="mt-2 text-sm text-gray-700">
             {product.variants.map((variant) => (
@@ -100,7 +102,12 @@ const renderCard = (product, onEditToggle, fetchProducts, editVariantId, setEdit
                   />
                 ) : (
                   <>
-                    <strong>{variant.type}</strong>: {variant.label} – R {variant.price} ({variant.qty} in stock)
+                    <strong>
+                      {Object.entries(variant.options || {})
+                        .map(([key, val]) => `${key}: ${val}`)
+                        .join(', ')}
+                    </strong>{' '}
+                    – R {variant.price} ({variant.qty} in stock)
                     <button
                       onClick={() => setEditVariantId(variant.id)}
                       className="ml-2 text-sm text-blue-600 underline"
@@ -114,6 +121,7 @@ const renderCard = (product, onEditToggle, fetchProducts, editVariantId, setEdit
           </ul>
         )}
 
+        {/* ✅ Add Variant Button */}
         <AddVariantForm productId={product.id} onSuccess={fetchProducts} />
 
         <button
@@ -125,4 +133,4 @@ const renderCard = (product, onEditToggle, fetchProducts, editVariantId, setEdit
       </CardContent>
     </Card>
   )
-} 
+}
