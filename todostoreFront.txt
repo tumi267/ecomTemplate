@@ -1,4 +1,8 @@
-
+checkout{
+    -variant
+    -qty
+    
+}
 nav{
    - search
    -favourites

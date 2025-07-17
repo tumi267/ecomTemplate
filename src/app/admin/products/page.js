@@ -6,7 +6,7 @@ import AddProduct from '../../components/AddProduct/AddProduct'
 import UpdateProduct from '../../components/UpdateProduct/UpdateProduct'
 import AddVariantForm from '../../components/AddVariant/AddVariant'
 import UpdateVariantForm from '../../components/UpdateVariantForm/UpdateVariantForm'
-
+import Upload from '../../components/Upload/Upload'
 function Products() {
   const [products, setProducts] = useState([])
   const [editId, setEditId] = useState(null)
@@ -56,6 +56,7 @@ function Products() {
 
 export default Products
 
+
 // ✅ Updated renderCard for dynamic options
 const renderCard = (product, onEditToggle, fetchProducts, editVariantId, setEditVariantId) => {
   const inStock = product.variants?.some(
@@ -73,6 +74,9 @@ const renderCard = (product, onEditToggle, fetchProducts, editVariantId, setEdit
             </span>
           )}
         </CardTitle>
+        <Upload
+        prod={product}
+        />
       </CardHeader>
 
       <CardContent>
