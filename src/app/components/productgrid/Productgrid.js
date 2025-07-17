@@ -14,49 +14,64 @@ import styles from './ProductGrid.module.css'
 import Link from 'next/link'
 import AddToCartButton from '../AddToCartButton/AddToCartButton'
 
+// Compare two option sets for exact match
+const isMatchingOptions = (optionsA = {}, optionsB = {}) => {
+  const keysA = Object.keys(optionsA)
+  const keysB = Object.keys(optionsB)
+  if (keysA.length !== keysB.length) return false
+  return keysA.every(key => optionsA[key] === optionsB[key])
+}
+
 function ProductGrid({ title, items, selector, param, categories }) {
-  const [cardinfo, setcardinfo] = useState([])
+  const [cardinfo, setCardInfo] = useState([])
+  const [variantsState, setVariantsState] = useState({})
 
   useEffect(() => {
     if (selector?.toLowerCase() === 'best seller' || selector?.toLowerCase() === 'week sale') {
-      setcardinfo(items)
+      setCardInfo(items)
     } else if (selector) {
       const seller = items.find(e => e.name === selector)
-      setcardinfo(seller?.items || [])
+      setCardInfo(seller?.items || [])
     } else {
-      setcardinfo(items)
+      setCardInfo(items)
     }
   }, [items, selector])
 
-  const regex = (text, numWords) => {
-    if (!text) return ''
-    const words = text.trim().split(/\s+/).filter(word => word.length > 0)
+  // Shorten description text
+  const truncateText = (text = '', numWords = 7) => {
+    const words = text.trim().split(/\s+/).filter(Boolean)
     return words.slice(0, numWords).join(' ') + (words.length > numWords ? '...' : '')
   }
 
-  const [variantsState, setVariantsState] = useState({})
+  // Handle selecting a variant option by label (e.g. size: 'M')
+  const handleVariantSelect = (productIndex, optionType, label) => {
 
-  const handleVariantSelect = (productIndex, type, value) => {
-    const parsed = JSON.parse(value)
+    const product = cardinfo[productIndex]
+    const variants = product?.variants || []
 
-    setVariantsState(prev => {
-      const current = prev[productIndex] || {}
+    const prevState = variantsState[productIndex] || {}
+    const updatedOptions = {
+      ...prevState.selectedOptions,
+      [optionType]: label,
+    }
 
-      const newState = {
-        ...current,
-        [type]: parsed
+    // Find variant matching all selected options
+    const matchingVariant = variants.find(variant =>
+      isMatchingOptions(variant.options, updatedOptions)
+    ) || null
+
+    setVariantsState(prev => ({
+      ...prev,
+      [productIndex]: {
+        selectedOptions: updatedOptions,
+        selectedVariant: matchingVariant,
+        variantInStock: matchingVariant?.trackQty === false || matchingVariant?.qty > 0,
+        isValid: !!matchingVariant,
       }
-
-      return {
-        ...prev,
-        [productIndex]: {
-          ...newState,
-          variantInStock: parsed.trackQty === false || parsed.qty > 0
-        }
-      }
-    })
+    }))
   }
 
+  // Define size order for sorting size labels nicely
   const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 
   const sortLabels = (labels, type) => {
@@ -76,10 +91,17 @@ function ProductGrid({ title, items, selector, param, categories }) {
 
       {param !== undefined && (
         <ul className={styles.navList}>
-          <li><Link href="/products" className={param === 1 ? styles.active : ''}>Products</Link></li>
-          {categories?.map((cat) => (
+          <li>
+            <Link href="/products" className={param === 1 ? styles.active : ''}>
+              Products
+            </Link>
+          </li>
+          {categories?.map(cat => (
             <li key={cat.id}>
-              <Link href={`/category/${cat.name}?id=${cat.id}`} className={param === cat.name ? styles.active : ''}>
+              <Link
+                href={`/category/${cat.name}?id=${cat.id}`}
+                className={param === cat.name ? styles.active : ''}
+              >
                 {cat.name}
               </Link>
             </li>
@@ -89,17 +111,16 @@ function ProductGrid({ title, items, selector, param, categories }) {
 
       <div className={styles.card_contain}>
         {cardinfo.map((product, index) => {
-          const allVariants = product.variants || []
-          const optionTypes = [...new Set(allVariants.flatMap(v => Object.keys(v.options || {})))]
+          const variants = product.variants || []
+          const optionTypes = [...new Set(variants.flatMap(v => Object.keys(v.options || {})))]
           const selected = variantsState[index] || {}
+          const selectedOptions = selected.selectedOptions || {}
+          const selectedVariant = selected.selectedVariant
 
-          // Determine which combinations are valid
-          const validCombos = allVariants.filter(v =>
-            (!v.trackQty || v.qty > 0)
-          ).map(v => v.options)
-
-          const allSelected = optionTypes.every(type => selected[type])
-          const isOutOfStock = optionTypes.some(type => selected[type]?.trackQty !== false && selected[type]?.qty <= 0)
+          const allSelected = optionTypes.every(type => selectedOptions[type])
+          const isOutOfStock = selectedVariant
+            ? (selectedVariant.trackQty !== false && selectedVariant.qty <= 0)
+            : false
           const shouldDisable = !allSelected || isOutOfStock
 
           return (
@@ -111,7 +132,7 @@ function ProductGrid({ title, items, selector, param, categories }) {
                 </CardHeader>
                 <CardContent>
                   <div className={styles.image_wrapper}>
-                    {selected?.variantInStock !== false ? (
+                    {selected.variantInStock !== false ? (
                       <Image src="/next.svg" alt={product.name} fill />
                     ) : (
                       <div className={styles.outOfStockOverlay}>Out of Stock</div>
@@ -121,13 +142,13 @@ function ProductGrid({ title, items, selector, param, categories }) {
               </Link>
 
               <CardDescription className={styles.description}>
-                {regex(product.description, 7)}
+                {truncateText(product.description, 7)}
               </CardDescription>
 
               {/* Variant selectors */}
-              {optionTypes.map((type) => {
+              {optionTypes.map(type => {
                 const labels = Array.from(new Set(
-                  allVariants.map(v => v.options?.[type])
+                  variants.map(v => v.options?.[type])
                 )).filter(Boolean)
 
                 const sortedLabels = sortLabels(labels, type)
@@ -136,31 +157,14 @@ function ProductGrid({ title, items, selector, param, categories }) {
                   <div className={styles.variantSection} key={type}>
                     <p className={styles.variantLabel}>{type}</p>
                     <div className={styles.options}>
-                      {sortedLabels.map((label, i) => {
-                        // Is this option part of any valid combination with other selected options?
-                        const tempOptions = {
-                          ...Object.fromEntries(optionTypes.map(t => [t, null])),
-                          ...Object.fromEntries(Object.entries(selected).map(([t, val]) => [t, val?.options?.[t]])),
-                          [type]: label,
-                        }
-
-                        const isValid = validCombos.some(combo =>
-                          optionTypes.every(optType => {
-                            return !tempOptions[optType] || combo[optType] === tempOptions[optType]
-                          })
-                        )
-
-                        const variantObj = allVariants.find(v => v.options?.[type] === label)
-                        const isSelected = selected[type]?.id === variantObj?.id
-
+                      {sortedLabels.map(label => {
+                        const isSelected = selectedOptions[type] === label
                         return (
                           <Button
-                            key={i}
-                            value={JSON.stringify(variantObj)}
-                            onClick={(e) => handleVariantSelect(index, type, e.target.value)}
+                            key={label}
+                            variant={isSelected ? 'default' : 'outline'}
                             className={`${styles.optionBtn} ${isSelected ? styles.active : ''}`}
-                            variant="outline"
-                            disabled={!isValid}
+                            onClick={() => handleVariantSelect(index, type, label)}
                           >
                             {label}
                           </Button>
@@ -174,12 +178,9 @@ function ProductGrid({ title, items, selector, param, categories }) {
               <AddToCartButton
                 product={{
                   ...product,
-                  ...optionTypes.reduce((acc, type) => {
-                    if (selected[type]) acc[type] = selected[type]
-                    return acc
-                  }, {})
+                  variant: selectedVariant,
                 }}
-                disabled={shouldDisable}
+                disabled={!selectedVariant || isOutOfStock}
               />
 
               <CardDescription className={styles.price}>R {product.price}</CardDescription>
