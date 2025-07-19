@@ -122,6 +122,7 @@ function ProductGrid({ title, items, selector, param, categories }) {
             ? (selectedVariant.trackQty !== false && selectedVariant.qty <= 0)
             : false
           const shouldDisable = !allSelected || isOutOfStock
+       
 
           return (
             <Card key={product.id || index} className={styles.card}>
@@ -133,7 +134,7 @@ function ProductGrid({ title, items, selector, param, categories }) {
                 <CardContent>
                   <div className={styles.image_wrapper}>
                     {selected.variantInStock !== false ? (
-                      <Image src="/next.svg" alt={product.name} fill />
+                      <Image src={product?.imagePath} alt={product.name} fill />
                     ) : (
                       <div className={styles.outOfStockOverlay}>Out of Stock</div>
                     )}
@@ -180,7 +181,9 @@ function ProductGrid({ title, items, selector, param, categories }) {
                   ...product,
                   variant: selectedVariant,
                 }}
-                disabled={!selectedVariant || isOutOfStock}
+                disabled={variants.length == 0
+                  ? (product.trackQty ? product.qty <= 0 : false)
+                  : (!selectedVariant || isOutOfStock)}
               />
 
               <CardDescription className={styles.price}>R {product.price}</CardDescription>

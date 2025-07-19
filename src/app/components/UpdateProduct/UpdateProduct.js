@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from 'react'
 import { editProduct } from '../../utils/admincalls'
-
+import Upload from '../Upload/Upload'
+import Image from 'next/image'
 
 export default function UpdateProduct({ product, onSuccess }) {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    imagePath: '',  // optional
+    imagePath: '',
     price: '',
     categoryId: '',
   })
@@ -16,7 +17,6 @@ export default function UpdateProduct({ product, onSuccess }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // Load categories for the dropdown
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -24,7 +24,7 @@ export default function UpdateProduct({ product, onSuccess }) {
         const data = await res.json()
         setCategories(data)
       } catch {
-        // handle errors silently or show a message
+        // optionally handle errors
       }
     }
     fetchCategories()
@@ -52,7 +52,11 @@ export default function UpdateProduct({ product, onSuccess }) {
     setError(null)
 
     try {
-      await editProduct(product.id, formData)
+      const dataToSend = {
+        ...formData,
+        price: parseFloat(formData.price),
+      }
+      await editProduct(product.id, dataToSend)
       onSuccess && onSuccess()
     } catch (err) {
       setError(err.message || 'Unknown error')
@@ -61,8 +65,18 @@ export default function UpdateProduct({ product, onSuccess }) {
     }
   }
 
+  const isFormValid =
+    formData.name &&
+    formData.description &&
+    formData.price &&
+    formData.categoryId
+
+    useEffect(()=>{console.log(formData)},[formData])
   return (
-    <form onSubmit={handleSubmit} className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form
+      onSubmit={handleSubmit}
+      className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4"
+    >
       {error && <div className="text-red-600">{error}</div>}
 
       <input
@@ -84,16 +98,11 @@ export default function UpdateProduct({ product, onSuccess }) {
         required
         className="border px-3 py-2 rounded"
       />
-
-      {/* Optional imagePath input
-      <input
-        type="text"
-        name="imagePath"
-        placeholder="Image Path (optional)"
-        value={formData.imagePath}
-        onChange={handleChange}
-        className="border px-3 py-2 rounded"
-      /> */}
+      <Image src={formData?.imagePath} alt={formData.name} height={300} width={300} />
+      <Upload
+        prod={formData}
+        onImageChange={setFormData}
+      />
 
       <input
         type="number"
@@ -125,7 +134,7 @@ export default function UpdateProduct({ product, onSuccess }) {
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || !isFormValid}
         className="bg-yellow-600 text-white px-4 py-2 rounded col-span-1 md:col-span-2"
       >
         {loading ? 'Updating...' : 'Update Product'}

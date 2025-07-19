@@ -1,0 +1,11 @@
+.imageContain{
+    position: relative;
+    height: 100px;
+    width: 100px;
+}
+
+.card{
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+}

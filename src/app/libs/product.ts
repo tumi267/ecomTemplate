@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client'
 // Get all products
 export async function getProducts() {
   return await prisma.product.findMany({
+    
     include: {
       category: true,
       variants: true,

@@ -6,6 +6,7 @@ import { Button } from '../../../../components/ui/button'
 import AddToCartButton from '../../../components/AddToCartButton/AddToCartButton'
 import styles from './product.module.css'
 import { getSingleProduct } from '../../../utils/admincalls'
+import Image from 'next/image'
 
 // Compare two sets of options for equality
 const isMatchingOptions = (optionsA = {}, optionsB = {}) => {
@@ -29,6 +30,7 @@ function Page() {
       if (!id) return
       try {
         const res = await getSingleProduct(id)
+     
         setProdinfo(res)
       } catch (err) {
         console.error('Failed to load product', err)
@@ -79,8 +81,10 @@ function Page() {
     selectedVariant.qty <= 0
 
   // Disable Add to Cart if options are missing OR variant doesn't exist OR out of stock
-  const disableAddToCart = isMissingOption || !selectedVariant || isOutOfStock
-console.log(isOutOfStock)
+  const disableAddToCart = variants.length == 0
+  ? (prodinfo.trackQty ? prodinfo.qty <= 0 : false)
+  : (isMissingOption || !selectedVariant || isOutOfStock)
+
 
   if (loading) return <p>Loading...</p>
   if (!prodinfo?.id) return <p>Product not found.</p>
@@ -94,7 +98,10 @@ console.log(isOutOfStock)
           {isOutOfStock ? (
             <h2>Out of Stock</h2>
           ) : (
-            <img src="/next.svg" alt={prodinfo.name} className={styles.image} />
+            <div className={styles.imageContain}>
+    
+            <Image src={prodinfo.imagePath} alt={prodinfo.name} fill objectFit='cover' />
+          </div>
           )}
         </div>
 

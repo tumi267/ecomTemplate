@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function Upload({prod}) {
+export default function Upload({prod,onImageChange}) {
   const [url, setUrl] = useState("");
 
   const handleUpload = async (e) => {
@@ -25,7 +25,8 @@ export default function Upload({prod}) {
 
       const data = await res.json();
       if (data.url) {
-        setUrl(data.url);
+        
+        onImageChange((prev) => ({ ...prev, imagePath: data.url}));
       } else {
         alert("Upload failed");
         console.error(data);
