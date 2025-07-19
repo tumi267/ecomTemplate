@@ -116,7 +116,7 @@ function Page() {
           </section>
 
           <section className={styles.section}>
-            <h3>Price: <span>R {prodinfo.price}</span></h3>
+            <h3>Price: <span>R {prodinfo.weekSale?prodinfo.price-prodinfo.discount:prodinfo.price}</span></h3>
           </section>
 
           {/* Variant Selectors */}

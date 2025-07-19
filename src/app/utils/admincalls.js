@@ -115,6 +115,16 @@ const getProductsByCategory = async (id) => {
   return res.json()
 }
 
+const addDiscount=async(body)=>{
+  
+  const res =await fetch(`/api/addDiscount`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  })
+  if (!res.ok) throw new Error('Failed to update variant')
+  return res.json()
+}
 export {
   addcategory,
   updatecategory,
@@ -129,4 +139,5 @@ export {
   getProductsByCategory,
   fetchcategory,
   getSingleProduct,
+  addDiscount,
 }

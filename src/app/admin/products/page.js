@@ -3,12 +3,10 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardDescription, CardTitle, CardContent, CardHeader } from '../../../components/ui/card'
 import AddProduct from '../../components/AddProduct/AddProduct'
-import UpdateProduct from '../../components/UpdateProduct/UpdateProduct'
-import AddVariantForm from '../../components/AddVariant/AddVariant'
-import UpdateVariantForm from '../../components/UpdateVariantForm/UpdateVariantForm'
 import Image from 'next/image'
 import styles from './product.module.css'
 import Link from 'next/link'
+import CreateDiscount from '../../components/CreateDiscount/CreateDiscount'
 function Products() {
   const [products, setProducts] = useState([])
   const [editId, setEditId] = useState(null)
@@ -86,9 +84,14 @@ const renderCard = (product,  fetchProducts, editVariantId, setEditVariantId) =>
         </CardDescription>
 
         <CardDescription className="font-bold text-lg text-black">
-          R {product.price}
+          R {product.weekSale?product.price-product.discount:product.price}{product.weekSale&&<p>sale</p>}
         </CardDescription>
-
+        <div>
+          add discount
+          <CreateDiscount
+          product={product}
+          />
+        </div>
 
         <Link href={`/admin/products/${product.id}`}>
         Edit

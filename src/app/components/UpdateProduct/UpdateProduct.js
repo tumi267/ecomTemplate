@@ -11,6 +11,7 @@ export default function UpdateProduct({ product, onSuccess }) {
     description: '',
     imagePath: '',
     price: '',
+    cost:'',
     categoryId: '',
   })
   const [categories, setCategories] = useState([])
@@ -38,6 +39,7 @@ export default function UpdateProduct({ product, onSuccess }) {
         imagePath: product.imagePath || '',
         price: product.price || '',
         categoryId: product.categoryId || '',
+        cost:product.cost||'',
       })
     }
   }, [product])
@@ -55,6 +57,7 @@ export default function UpdateProduct({ product, onSuccess }) {
       const dataToSend = {
         ...formData,
         price: parseFloat(formData.price),
+        cost: parseFloat(formData.cost),
       }
       await editProduct(product.id, dataToSend)
       onSuccess && onSuccess()
@@ -71,7 +74,7 @@ export default function UpdateProduct({ product, onSuccess }) {
     formData.price &&
     formData.categoryId
 
-    useEffect(()=>{console.log(formData)},[formData])
+   
   return (
     <form
       onSubmit={handleSubmit}
@@ -113,6 +116,16 @@ export default function UpdateProduct({ product, onSuccess }) {
         required
         step="0.01"
         className="border px-3 py-2 rounded"
+      />
+      <input
+              type="number"
+              name="cost"
+              placeholder="cost"
+              value={formData.cost}
+              onChange={handleChange}
+              required
+              step="0.01"
+              className="border px-3 py-2 rounded"
       />
 
       <select

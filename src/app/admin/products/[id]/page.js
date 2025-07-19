@@ -41,14 +41,6 @@ function EditProduct() {
     <div>
       <h1>Edit Product</h1>
 
-        <p>
-        Discount amount: {calculateDiscount(100, product.price, 0.5).toFixed(2)}
-        </p>
-        <p>
-        Minimum sale price: {(product.price - calculateDiscount(100, product.price, 0.5)).toFixed(2)}
-        </p>
-
-
       <UpdateProduct
         product={product}
         onSuccess={fetchProduct}

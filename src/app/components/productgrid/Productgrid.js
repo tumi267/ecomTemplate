@@ -186,7 +186,7 @@ function ProductGrid({ title, items, selector, param, categories }) {
                   : (!selectedVariant || isOutOfStock)}
               />
 
-              <CardDescription className={styles.price}>R {product.price}</CardDescription>
+              <CardDescription className={styles.price}>R {product.weekSale?product.price-product?.discount:product.price}</CardDescription>
             </Card>
           )
         })}
