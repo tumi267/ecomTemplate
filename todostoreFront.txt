@@ -15,8 +15,8 @@ product{
 }
 
 // admin 
-    add sales
+
     best seller
-    cost of items
+  
     supplier
     Available to Public

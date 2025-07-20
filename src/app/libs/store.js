@@ -9,17 +9,20 @@ export const useCartStore = create(
 
       addItem: (item) =>
         set((state) => {
-          const existingItem = state.items.find((i) => i.id === item.id)
+          // Identify the item uniquely (variantId if it exists, fallback to productId)
+          const itemId = item.variantId || item.productId
+
+          const existingItem = state.items.find((i) => i.id === itemId)
           let items = []
 
           if (existingItem) {
             items = state.items.map((i) =>
-              i.id === item.id
+              i.id === itemId
                 ? { ...i, quantity: i.quantity + item.quantity }
                 : i
             )
           } else {
-            items = [...state.items, item]
+            items = [...state.items, { ...item, id: itemId }]
           }
 
           const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0)
@@ -48,7 +51,7 @@ export const useCartStore = create(
             .map((i) =>
               i.id === id ? { ...i, quantity: i.quantity - 1 } : i
             )
-            .filter((i) => i.quantity > 0) // remove item if quantity drops to 0
+            .filter((i) => i.quantity > 0)
 
           const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0)
           return { items, total }

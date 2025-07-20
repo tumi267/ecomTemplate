@@ -5,7 +5,7 @@ export async function POST(req) {
   const body = await req.json()
   const { items, total } = body
 
-  const item_names = items.map(i => `${i.name} x${i.quantity}`).join(', ').slice(0, 255)
+  const item_names = items.map(i => `${i.product.name} x${i.quantity}`).join(', ').slice(0, 255)
 
   const mode = process.env.NEXT_DEV
   const baseUrl = process.env.NEXT_PUBLIC_PUBLIC_URL || process.env.PUBLIC_URL

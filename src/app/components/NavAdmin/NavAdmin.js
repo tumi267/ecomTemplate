@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import styles from './NavAdmin.module.css'
 function NavAdmin() {
-    const links=['dashboard','category','products','customers','sales']
+    const links=['dashboard','category','products','customers','sales','orders']
     const [isMounted, setIsMounted] = useState(false)
     const [showNav, setShowNav] = useState(true)
     const [lastScrollY, setLastScrollY] = useState(0)

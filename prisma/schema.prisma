@@ -27,6 +27,14 @@ enum OrderStatus {
   RETURNED
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
 model Category {
   id          String    @id @default(uuid())
   name        String
@@ -59,7 +67,7 @@ model Product {
   qty                    Int
   trackQty               Boolean
   variants               Variant[]
-  orders                 Order[]
+
 }
 
 model Variant {
@@ -75,6 +83,7 @@ model Variant {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   cartItems   CartItem[]
+  
 }
 
 model User {
@@ -99,25 +108,39 @@ model User {
 
 model Order {
   id         String      @id @default(uuid())
-  userId     String
-  productId  String
-  price      Decimal
-
-  status     OrderStatus  @default(PENDING)
-
+  userId     String?
+  productJSON String     // Stores serialized order items
+  price      Decimal     // Total order amount
+  
+  status     OrderStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(PENDING)
+  
+  // Shipping information
   shippingAddressLine1  String?
   shippingAddressLine2  String?
   shippingCity          String?
   shippingProvince      String?
   shippingPostalCode    String?
   shippingCountry       String?
-
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product    Product     @relation(fields: [productId], references: [id], onDelete: Restrict)
+  
+  // Customer information
+  customerName   String?
+  customerEmail  String?
+  customerPhone  String?
+  
+  // Payment metadata (optional but recommended)
+  paymentMethod  String?
+  paymentId      String?  // Reference from payment processor
+  paidAt         DateTime?
+  
+  // Timestamps
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  // Relations
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
 
 // Shopping cart per user
 model Cart {
