@@ -21,10 +21,19 @@ enum Currency {
 enum OrderStatus {
   PENDING
   PROCESSING
-  SHIPPED
-  DELIVERED
+  PARTIALLY_PROCESSED
+  FULFILLED
   CANCELLED
   RETURNED
+}
+
+enum CourierStatus {
+  NOT_DISPATCHED
+  SHIPPED
+  IN_TRANSIT
+  DELIVERED
+  FAILED_ATTEMPT
+  RETURNED_TO_SENDER
 }
 
 enum PaymentStatus {
@@ -139,6 +148,7 @@ model Order {
   
   // Relations
   user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  CourierTracking     CourierTracking?
 }
 
 
@@ -163,4 +173,16 @@ model CartItem {
 
   cart        Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
   variant     Variant   @relation(fields: [variantId], references: [id], onDelete: Restrict)
+}
+
+model CourierTracking {
+  id             String         @id @default(cuid())
+  orderId        String         @unique
+  order          Order          @relation(fields: [orderId], references: [id])
+  status         CourierStatus
+  trackingNumber String?
+  carrier        String?        // e.g., DHL, Fastway, Aramex
+  estimatedArrival DateTime?
+  updatedAt      DateTime       @updatedAt
+  createdAt      DateTime       @default(now())
 }

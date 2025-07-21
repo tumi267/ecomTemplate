@@ -134,6 +134,16 @@ const getSingleOrder=async(body)=>{
   if (!res.ok) throw new Error('Failed to update variant')
   return res.json()
 }
+
+const processOrder=async(id, updatedProductJSON, OrderStatus)=>{
+  const res =await fetch('/api/processOrder',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({id, updatedProductJSON, OrderStatus})
+  })
+  if (!res.ok) throw new Error('Failed to update variant')
+  return res.json()
+}
 function timeAgo(date) {
   const now = new Date()
   const past = new Date(date)
@@ -177,4 +187,5 @@ export {
   addDiscount,
   getSingleOrder,
   timeAgo,
+  processOrder,
 }

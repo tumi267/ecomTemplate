@@ -2,7 +2,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { getSingleOrder, timeAgo } from '../../../utils/admincalls'
+import { getSingleOrder, processOrder, timeAgo } from '../../../utils/admincalls'
 import styles from './OrdersId.module.css'
 
 function OrdersId() {
@@ -10,6 +10,7 @@ function OrdersId() {
   const { id } = params
   const [orderinfo, setOrderinfo] = useState()
   const [productinfo, setproductinfo] = useState([])
+  const [processproduct,setprocessproduct]=useState()
 
   useEffect(() => {
     const getData = async () => {
@@ -26,11 +27,42 @@ function OrdersId() {
       }))
 
       setproductinfo(orderdetails)
+      setprocessproduct(JSON.parse(data.data.productJSON))
     }
 
     getData()
   }, [])
-
+  const handleProcess = async () => {
+    if (!orderinfo || !processproduct) return
+  
+    const original = JSON.parse(orderinfo.productJSON)
+  
+    const changed = processproduct.filter((item, index) => {
+      return item.quantity !== original[index].quantity
+    })
+  
+    const updated = original.map((item, index) => {
+      const changedItem = changed.find((c) => c.id === item.id)
+      if (changedItem) {
+        return {
+          ...item,
+          sentQuantity: changedItem.quantity,
+        }
+      }
+      return item
+    })
+  
+    const updatedItems = updated.filter((e) => 'sentQuantity' in e)
+  
+    // ✅ Compute total processed and total required
+    const totalProcessed = processproduct.reduce((sum, item) => sum + item.quantity, 0)
+    const totalOriginal = original.reduce((sum, item) => sum + item.quantity, 0)
+  
+    const status = totalProcessed === totalOriginal ? 'FULFILLED' : 'PARTIALLY_PROCESSED'
+  
+    const res = await processOrder(id, updated, status)
+    console.log(res)
+  }
   return (
     <div className={styles.container}>
       <div className={styles.section}>
@@ -40,6 +72,7 @@ function OrdersId() {
 
         <h2>Order Number</h2>
         <p>{orderinfo?.id}</p>
+        <button onClick={handleProcess}>process order</button>
       </div>
 
       <div className={styles.section}>
@@ -77,7 +110,15 @@ function OrdersId() {
             <p><strong>Product:</strong> {e.product?.name}</p>
             <img src={e.product?.imagePath} alt={e.product?.name} className={styles.image} />
             <p><strong>Quantity:</strong> {e.quantity}</p>
-
+            <input
+              type="number"
+              value={processproduct[i].quantity}
+              onChange={(e) => {
+              const newArr = [...processproduct]
+              newArr[i].quantity = Number(e.target.value)
+              setprocessproduct(newArr)
+              }}
+            />
             {e.options && typeof e.options === 'object' &&
               Object.entries(e.options).map(([key, value], index) => (
                 <p key={index}><strong>{key}:</strong> {value}</p>

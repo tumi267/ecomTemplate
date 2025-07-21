@@ -1,5 +1,5 @@
 import prisma from './prisma'
-import { Prisma } from '@prisma/client'
+import { OrderStatus, Prisma } from '@prisma/client'
 
 // Get all products
 export async function getProducts() {
@@ -335,4 +335,13 @@ export async function getSingleOrder(id: string){
   return await prisma.order.findUnique({
     where:{id}
   })
+}
+export async function proccessOrder(id: string,updatedItems:string,status:OrderStatus) {
+  await prisma.order.update({
+    where: {id},
+    data: {
+      productJSON: updatedItems,
+      status:status
+    }
+  });
 }
