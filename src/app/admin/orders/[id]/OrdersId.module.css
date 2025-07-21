@@ -1,0 +1,27 @@
+/* app/orders/[id]/order.module.css */
+.container {
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+  }
+  
+  .section {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1rem;
+  }
+  
+  .productCard {
+    background: #f9f9f9;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .image {
+    max-width: 100px;
+    height: 100px;
+    display: block;
+    margin-top: 0.5rem;
+  }
+  

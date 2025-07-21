@@ -125,6 +125,41 @@ const addDiscount=async(body)=>{
   if (!res.ok) throw new Error('Failed to update variant')
   return res.json()
 }
+const getSingleOrder=async(body)=>{
+  const res =await fetch('/api/getSingleOrder',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  })
+  if (!res.ok) throw new Error('Failed to update variant')
+  return res.json()
+}
+function timeAgo(date) {
+  const now = new Date()
+  const past = new Date(date)
+  const diffMs = now - past
+
+  const seconds = Math.floor(diffMs / 1000)
+  const minutes = Math.floor(diffMs / (1000 * 60))
+  const hours = Math.floor(diffMs / (1000 * 60 * 60))
+
+  if (hours >= 24) {
+    const day = String(past.getDate()).padStart(2, '0')
+    const month = String(past.getMonth() + 1).padStart(2, '0')
+    const year = past.getFullYear()
+    return `${day}/${month}/${year}`
+  }
+
+  if (hours > 0) {
+    return hours === 1 ? 'less than an hour ago' : `${hours} hours ago`
+  }
+
+  if (minutes > 5) {
+    return `${minutes} minutes ago`
+  }
+
+  return 'just now'
+}
 export {
   addcategory,
   updatecategory,
@@ -140,4 +175,6 @@ export {
   fetchcategory,
   getSingleProduct,
   addDiscount,
+  getSingleOrder,
+  timeAgo,
 }

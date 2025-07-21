@@ -330,3 +330,9 @@ export async function getOrders() {
     createdAt: 'desc', // Newest orders first
   },})
 }
+
+export async function getSingleOrder(id: string){
+  return await prisma.order.findUnique({
+    where:{id}
+  })
+}
