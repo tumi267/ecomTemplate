@@ -1,0 +1,43 @@
+/* SalesSummary.module.css */
+.container {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  .card {
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .chartContainer {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    min-height: 120px;
+  }
+  
+  .chart {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  .chartTooltip {
+    background: var(--popover-background) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: calc(var(--radius) - 2px) !important;
+    padding: 0.5rem !important;
+  }
+  
+  .chartAxis {
+    font-size: 0.75rem !important;
+    fill: var(--muted-foreground) !important;
+  }
+  
+  .chartArea {
+    stroke-width: 2px !important;
+  }

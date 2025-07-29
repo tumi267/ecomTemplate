@@ -1,7 +1,5 @@
 checkout{
-    -variant
     -qty
-    
 }
 nav{
    - search

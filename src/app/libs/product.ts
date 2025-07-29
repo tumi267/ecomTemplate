@@ -1,5 +1,5 @@
 import prisma from './prisma'
-import { OrderStatus, Prisma } from '@prisma/client'
+import { OrderStatus, PaymentStatus, Prisma } from '@prisma/client'
 
 // Get all products
 export async function getProducts() {
@@ -72,7 +72,6 @@ export async function getWeekSales() {
 }
 
 
-// Create a product
 // Create a product
 export async function createProduct(data: {
   name: string
@@ -253,7 +252,7 @@ export async function addDiscount(id: string, data: {
   })
 }
 
-
+// create order
 export async function createOrder(data: {
   userId?: string | null;
   items: {
@@ -336,12 +335,26 @@ export async function getSingleOrder(id: string){
     where:{id}
   })
 }
-export async function proccessOrder(id: string,updatedItems:string,status:OrderStatus) {
+// update order
+export async function proccessOrder(id: string,updatedItems:string,status:OrderStatus,payment:PaymentStatus) {
   await prisma.order.update({
     where: {id},
     data: {
       productJSON: updatedItems,
-      status:status
+      status:status,
+      paymentStatus:payment
     }
+  });
+}
+// Get all orders where payment == "PAID"
+export async function getOrdersPAID(status: string) {
+
+  return await prisma.order.findMany({
+    where: {
+      paymentStatus: status as PaymentStatus,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
   });
 }

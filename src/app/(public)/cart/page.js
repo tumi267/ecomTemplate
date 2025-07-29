@@ -63,83 +63,90 @@ function Cart() {
         <div className={styles.clearBtnWrapper}>
           <ClearCart />
         </div>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <label htmlFor="name">Full Name*</label>
-          <input
-            id="name"
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={customer.name}
-            onChange={handleChange}
-            required
-          />
+        <form onSubmit={(e) => e.preventDefault()} className={styles.form}>
+  <label htmlFor="name" className={styles.label}>Full Name*</label>
+  <input
+    id="name"
+    type="text"
+    name="name"
+    placeholder="Full Name"
+    value={customer.name}
+    onChange={handleChange}
+    required
+    className={styles.input}
+  />
 
-          <label htmlFor="email">Email*</label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={customer.email}
-            onChange={handleChange}
-            required
-          />
+  <label htmlFor="email" className={styles.label}>Email*</label>
+  <input
+    id="email"
+    type="email"
+    name="email"
+    placeholder="Email"
+    value={customer.email}
+    onChange={handleChange}
+    required
+    className={styles.input}
+  />
 
-          <label htmlFor="phone">Phone*</label>
-          <input
-            id="phone"
-            type="tel"
-            name="phone"
-            placeholder="Phone"
-            value={customer.phone}
-            onChange={handleChange}
-            required
-          />
+  <label htmlFor="phone" className={styles.label}>Phone*</label>
+  <input
+    id="phone"
+    type="tel"
+    name="phone"
+    placeholder="Phone"
+    value={customer.phone}
+    onChange={handleChange}
+    required
+    className={styles.input}
+  />
 
-          <label htmlFor="streetAddress">Street Address*</label>
-          <input
-            id="streetAddress"
-            type="text"
-            name="streetAddress"
-            placeholder="Street Address"
-            value={customer.streetAddress}
-            onChange={handleChange}
-            required
-          />
+  <label htmlFor="streetAddress" className={styles.label}>Street Address*</label>
+  <input
+    id="streetAddress"
+    type="text"
+    name="streetAddress"
+    placeholder="Street Address"
+    value={customer.streetAddress}
+    onChange={handleChange}
+    required
+    className={styles.input}
+  />
 
-          <label htmlFor="suburb">Suburb</label>
-          <input
-            id="suburb"
-            type="text"
-            name="suburb"
-            placeholder="Suburb"
-            value={customer.suburb}
-            onChange={handleChange}
-          />
+  <label htmlFor="suburb" className={styles.label}>Suburb</label>
+  <input
+    id="suburb"
+    type="text"
+    name="suburb"
+    placeholder="Suburb"
+    value={customer.suburb}
+    onChange={handleChange}
+    className={styles.input}
+  />
 
-          <label htmlFor="city">City*</label>
-          <input
-            id="city"
-            type="text"
-            name="city"
-            placeholder="City"
-            value={customer.city}
-            onChange={handleChange}
-            required
-          />
+  <label htmlFor="city" className={styles.label}>City*</label>
+  <input
+    id="city"
+    type="text"
+    name="city"
+    placeholder="City"
+    value={customer.city}
+    onChange={handleChange}
+    required
+    className={styles.input}
+  />
 
-          <label htmlFor="postalCode">Postal Code*</label>
-          <input
-            id="postalCode"
-            type="text"
-            name="postalCode"
-            placeholder="Postal Code"
-            value={customer.postalCode}
-            onChange={handleChange}
-            required
-          />
-        </form>
+  <label htmlFor="postalCode" className={styles.label}>Postal Code*</label>
+  <input
+    id="postalCode"
+    type="text"
+    name="postalCode"
+    placeholder="Postal Code"
+    value={customer.postalCode}
+    onChange={handleChange}
+    required
+    className={styles.input}
+  />
+</form>
         <div className={styles.clearBtnWrapper}>
         <PayFastCheckoutButton
         items={items} 

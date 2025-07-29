@@ -1,7 +1,7 @@
 .cartPreview {
     position: absolute;
     top: 3rem;
-    right: 0;
+    right: 0.5em;
     background: white;
     padding: 1rem;
     border: 1px solid #ddd;
@@ -9,4 +9,30 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 999;
   }
+  .item{
+    border-bottom: 1px solid rgb(173, 171, 171);
+    margin-bottom: 0.25em;
+  }
+  .image{
+    position: relative;
+    height: 80px;
+    width: 80px;
+  }
+  .qtyBtn {
+    background-color: #111;
+    color: #fff;
+    border: none;
+    padding: 0.4em 0.8em;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
   
+  .qtyBtn:hover {
+    background-color: #444;
+  }
+  .qtyBtnContain{
+    display: flex;
+    gap: 0.5em;
+  }

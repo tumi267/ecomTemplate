@@ -14,12 +14,13 @@ function PayFastCheckoutButton({ items, total, customer, userId }) {
       if (!orderResponse.ok) {
         throw new Error('Failed to create order');
       }
-
+      const orderData = await orderResponse.json();
+   
       // 2. Get PayFast payment data
       const payfastResponse = await fetch('/api/payfast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, total }),
+        body: JSON.stringify({ orderid:orderData.id,items, total,customer }),
       });
 
       if (!payfastResponse.ok) {
@@ -35,6 +36,7 @@ function PayFastCheckoutButton({ items, total, customer, userId }) {
       
       // Add all payment data as hidden inputs
       Object.entries(paymentData).forEach(([key, value]) => {
+        
         const input = document.createElement('input');
         input.type = 'hidden';
         input.name = key;
