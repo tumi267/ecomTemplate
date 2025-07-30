@@ -186,3 +186,11 @@ model CourierTracking {
   updatedAt      DateTime       @updatedAt
   createdAt      DateTime       @default(now())
 }
+
+model Hero {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String
+  altText   String
+  position  Int      @unique // position/order of hero on the homepage, e.g. 1, 2, 3
+  createdAt DateTime @default(now())
+}

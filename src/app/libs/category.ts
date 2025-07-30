@@ -34,3 +34,12 @@ export async function createCategory(data: {
       where: { id },
     })
   }
+
+  // hero
+
+  export async function getHeroes() {
+    return await prisma.hero.findMany({
+      orderBy: { position: 'asc' }
+    });
+  }
+  
