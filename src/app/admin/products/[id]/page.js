@@ -39,8 +39,6 @@ function EditProduct() {
 
   return (
     <div>
-      <h1>Edit Product</h1>
-
       <UpdateProduct
         product={product}
         onSuccess={fetchProduct}

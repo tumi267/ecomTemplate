@@ -1,3 +1,14 @@
 .chartcontain{
     height: 20em;
 }
+.tablecontain{
+    width: 90%;
+    margin: auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    padding-top: 2.5em;
+    padding-bottom: 2.5em;
+    }
+    .theader{
+    text-align: left;
+    }

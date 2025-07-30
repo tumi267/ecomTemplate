@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { addProduct } from '../../utils/admincalls'
-
-export default function AddProduct({ onSuccess }) {
+import styles from './AddProduct.module.css'
+export default function AddProduct({ onSuccess,closeAdd }) {
   const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState({
     name: '',
@@ -72,9 +72,12 @@ export default function AddProduct({ onSuccess }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className={styles.contain}>
+      <button className={styles.closeBtn} onClick={()=>{closeAdd(false)}}>x</button>
+    <form onSubmit={handleSubmit} className={styles.from}>
       {error && <div className="text-red-600 col-span-full">{error}</div>}
-
+      <label>Product Name</label>
+      <br/>
       <input
         type="text"
         name="name"
@@ -84,17 +87,21 @@ export default function AddProduct({ onSuccess }) {
         required
         className="border px-3 py-2 rounded"
       />
-
-      <input
+      <br/>
+      <lable>Description</lable>
+      <br/>
+      <textarea
         type="text"
         name="description"
         placeholder="Description"
         value={formData.description}
         onChange={handleChange}
         required
-        className="border px-3 py-2 rounded"
+        className={styles.textArea}
       />
-
+      <br/>
+      <lable>Price</lable>
+      <br/>
       <input
         type="number"
         name="price"
@@ -105,7 +112,9 @@ export default function AddProduct({ onSuccess }) {
         step="0.01"
         className="border px-3 py-2 rounded"
       />
-
+      <br/>
+      <lable>Quantity</lable>
+      <br/>
       <input
         type="number"
         name="qty"
@@ -115,6 +124,7 @@ export default function AddProduct({ onSuccess }) {
         required
         className="border px-3 py-2 rounded"
       />
+      <br/>
 
       <select
         name="trackQty"
@@ -125,7 +135,7 @@ export default function AddProduct({ onSuccess }) {
         <option value="true">Track Quantity</option>
         <option value="false">Don't Track Quantity</option>
       </select>
-
+      <br/>
       <select
         name="categoryId"
         value={formData.categoryId}
@@ -140,14 +150,15 @@ export default function AddProduct({ onSuccess }) {
           </option>
         ))}
       </select>
-
+      <br/>
       <button
         type="submit"
         disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded col-span-full"
+        className={styles.Btn}
       >
         {loading ? 'Adding...' : 'Add Product'}
       </button>
     </form>
+    </div>
   )
 }

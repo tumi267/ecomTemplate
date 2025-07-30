@@ -12,9 +12,6 @@ product{
     favourites
 }
 
-// admin 
-
-    best seller
-  
+// admin   
     supplier
     Available to Public

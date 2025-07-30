@@ -1,14 +1,3 @@
-.imageContain{
-    position: relative;
-    height: 100px;
-    width: 100px;
-}
-
-.card{
-    display: flex;
-    align-items: center;
-    gap: 1.5em;
-}
 .Table{
     width: 90%;
     margin: auto;
@@ -41,4 +30,10 @@
 
     .Btn:hover {
         background-color: var(--button-inverted-hover, #222);
+    }
+    .head{
+        width: 100%;
+    }
+    .itemselect{
+        cursor: pointer;
     }

@@ -2,12 +2,7 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Skeleton } from '../../../components/ui/skeleton';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table,TableBody,TableCell,TableHead,TableHeader,TableRow,
 } from '../../../components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import styles from './TopProformingProducts.module.css'
@@ -20,7 +15,7 @@ export default function TopPerformingProducts({ topProducts = [], isLoading = fa
     image: product?.image || null,
     avgPrice: product?.totalQuantity ? (product.totalRevenue / product.totalQuantity) : 0
   })) || [];
-console.log(chartData)
+
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -56,8 +51,8 @@ console.log(chartData)
         <CardContent>
           <div className="h-[300px]">
             {chartData.length > 0 ? (
-                <div style={{ width: '100%', height: 300 }}>
-        <ResponsiveContainer width="100%" height="100%">
+                <div className={styles.chart}>
+        <ResponsiveContainer className={styles.barContain}>
             <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />

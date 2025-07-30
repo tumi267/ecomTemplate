@@ -81,12 +81,12 @@ export default function TopVariants({ productName, variants }) {
           <CardTitle>Top Variants of {productName}</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
+          <Table className={styles.tablecontain}>
             <TableHeader>
               <TableRow>
-                <TableHead>Options</TableHead>
-                <TableHead>Units Sold</TableHead>
-                <TableHead>Revenue</TableHead>
+                <TableHead className={styles.theader}>Options</TableHead>
+                <TableHead className={styles.theader}>Units Sold</TableHead>
+                <TableHead className={styles.theader}>Revenue</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

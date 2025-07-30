@@ -21,7 +21,7 @@ function ClassicGrid({title,items}) {
           <div className={styles.overlay}/>
           <Link className={styles.card_link} href={`/category/${e.name}?id=${e.id}`}>
           <div className={styles.image_wrapper}>
-          <Image src='/next.svg' alt={e.name} fill />
+          <Image src={e.imagePath?e.imagePath:'/next.svg'} alt={e.name} fill />
           <CardTitle className={styles.cardTitle}>{e.name}</CardTitle>
           </div>
           </Link>

@@ -1,15 +1,4 @@
-.imageContain{
-    position: relative;
-    height: 100px;
-    width: 100px;
-}
-
-.card{
-    display: flex;
-    align-items: center;
-    gap: 1.5em;
-}
-.Table{
+    .Table{
     width: 90%;
     margin: auto;
     gap: 0.5em;
@@ -17,7 +6,6 @@
     .theader{
     text-align: left;
     }
-
     .Btn {
         transition-property: color, background-color, border-color, box-shadow, opacity;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);

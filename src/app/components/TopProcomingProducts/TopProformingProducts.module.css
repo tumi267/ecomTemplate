@@ -5,3 +5,14 @@ margin: auto;
 .theader{
 text-align: left;
 }
+.chart{
+    width: 90%;
+    max-width: 1200px;
+    height: 20em; 
+    margin-left: auto;
+    margin-right: auto;
+}
+.barContain{
+    width:100%;
+    height:100%;
+}

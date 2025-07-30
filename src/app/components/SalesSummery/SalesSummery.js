@@ -134,12 +134,12 @@ export default function SalesSummary({
           <h3 className={styles.cardTitle}>Top Product</h3>
           {topProduct ? (
             <>
-              <p className="text-lg font-bold truncate">{topProduct.name}</p>
-              <p className="text-sm text-muted-foreground">R{topProduct.totalRevenue.toFixed(2)}</p>
-              <p className="text-sm text-muted-foreground">{topProduct.totalQuantity} units</p>
+              <p className={styles.cardValue}>{topProduct.name}</p>
+              <p className={styles.cardValue}>R{topProduct.totalRevenue.toFixed(2)}</p>
+              <p className={styles.cardValue}>{topProduct.totalQuantity} units</p>
             </>
           ) : (
-            <p className="text-sm text-muted-foreground">No data available</p>
+            <p className={styles.cardValue}>No data available</p>
           )}
         </div>
       </div>

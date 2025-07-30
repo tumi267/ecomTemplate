@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react'
 import { editProduct } from '../../utils/admincalls'
 import Upload from '../Upload/Upload'
 import Image from 'next/image'
-
+import styles from './updateProduct.module.css'
+import {Button} from '../../../components/ui/button'
 export default function UpdateProduct({ product, onSuccess }) {
   const [formData, setFormData] = useState({
     name: '',
@@ -81,7 +82,9 @@ export default function UpdateProduct({ product, onSuccess }) {
       className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4"
     >
       {error && <div className="text-red-600">{error}</div>}
-
+      <label className={styles.label}>Product Name</label>
+      <br/>
+      <div className={styles.prodInputsContain}>
       <input
         type="text"
         name="name"
@@ -91,22 +94,37 @@ export default function UpdateProduct({ product, onSuccess }) {
         required
         className="border px-3 py-2 rounded"
       />
-
-      <input
+      </div>
+      <hr/>
+      <label className={styles.label}>Description</label>
+      <br/>
+      <div className={styles.prodInputsContain}>
+      <textarea
         type="text"
         name="description"
         placeholder="Description"
         value={formData.description}
         onChange={handleChange}
         required
-        className="border px-3 py-2 rounded"
+        className={styles.textArea}
       />
-      <Image src={formData?.imagePath} alt={formData.name} height={300} width={300} />
+      <div>
+      <div className={styles.imageContain}>
+      <Image src={formData?.imagePath?formData.imagePath:'/next.svg'} alt={formData.name} fill />
+      </div>
+      <label>Uplaod image</label>
+      <br/>
       <Upload
         prod={formData}
         onImageChange={setFormData}
       />
-
+      </div>
+      </div>
+      <hr/>
+      <div className={styles.prodInputsContain}>
+      <span>
+      <label className={styles.label}>Price</label>
+      <br/>
       <input
         type="number"
         name="price"
@@ -117,17 +135,24 @@ export default function UpdateProduct({ product, onSuccess }) {
         step="0.01"
         className="border px-3 py-2 rounded"
       />
+      </span>
+      <span>
+      <label className={styles.label}>Cost</label>
+      <br/>
       <input
-              type="number"
-              name="cost"
-              placeholder="cost"
-              value={formData.cost}
-              onChange={handleChange}
-              required
-              step="0.01"
-              className="border px-3 py-2 rounded"
+        type="number"
+        name="cost"
+        placeholder="cost"
+        value={formData.cost}
+        onChange={handleChange}
+        required
+        step="0.01"
+        className="border px-3 py-2 rounded"
       />
-
+      </span>
+      <span>
+      <label className={styles.label}>categoy</label>
+      <br/>
       <select
         name="categoryId"
         value={formData.categoryId}
@@ -143,15 +168,19 @@ export default function UpdateProduct({ product, onSuccess }) {
             {cat.name}
           </option>
         ))}
+        
       </select>
-
+      </span>
+      </div>
+      <div className={styles.prodInputsContain}>
       <button
         type="submit"
         disabled={loading || !isFormValid}
-        className="bg-yellow-600 text-white px-4 py-2 rounded col-span-1 md:col-span-2"
+        className={styles.Btn}
       >
         {loading ? 'Updating...' : 'Update Product'}
       </button>
+      </div>
     </form>
   )
 }

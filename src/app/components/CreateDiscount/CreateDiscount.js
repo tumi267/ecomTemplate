@@ -47,7 +47,7 @@ function CreateDiscount({ product }) {
   return (
     <div>
       <button onClick={handleToggle}>
-        {isDiscount ? 'Remove Discount' : 'Enable Discount'}
+        {isDiscount ? 'Remove Discount' : 'Create Discount'}
       </button>
 
       {isDiscount && (

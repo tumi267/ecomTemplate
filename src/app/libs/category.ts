@@ -11,7 +11,7 @@ export async function getCategory() {
 export async function createCategory(data: {
     name: string
     description?: string
-    image?: string
+    imagePath?: string
   }) {
     return await prisma.category.create({
       data,
@@ -21,7 +21,7 @@ export async function createCategory(data: {
   export async function updateCategory(id: string, data: {
     name?: string
     description?: string
-    image?: string
+    imagePath?: string
   }) {
     return await prisma.category.update({
       where: { id },

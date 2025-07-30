@@ -14,11 +14,11 @@ const addcategory=async(name, description)=>{
 
 
 
- async function updatecategory(id, name, description) {
+ async function updatecategory(id, name, description,image) {
     const res = await fetch('/api/updateCategory', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, name, description }),
+      body: JSON.stringify({ id, name, description,image }),
     })
   
     if (!res.ok) {

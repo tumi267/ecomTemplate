@@ -48,7 +48,7 @@ model Category {
   id          String    @id @default(uuid())
   name        String
   description String?
-  image       String?
+  imagePath   String?
   products    Product[]
 }
 

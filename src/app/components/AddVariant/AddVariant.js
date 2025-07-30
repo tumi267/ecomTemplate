@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { addVariant } from '../../utils/admincalls'
-
+import styles from './AddVariant.module.css'
 export default function AddVariantForm({ productId, onSuccess }) {
   const [fields, setFields] = useState([{ key: '', value: '' }])
   const [price, setPrice] = useState('')
@@ -66,6 +66,10 @@ export default function AddVariantForm({ productId, onSuccess }) {
         <h3 className="font-medium">Variant Options</h3>
         {fields.map((field, index) => (
           <div key={index} className="flex gap-2 items-center">
+            <div className={styles.prodInputsContain}> 
+            <span >
+            <lable className={styles.label}>Type</lable>
+            <br/>
             <input
               type="text"
               placeholder="Option Name (e.g. size)"
@@ -74,6 +78,10 @@ export default function AddVariantForm({ productId, onSuccess }) {
               className="border px-2 py-1 rounded w-1/2"
               required
             />
+            </span>
+            <span >
+            <lable className={styles.label}>Value</lable>
+            <br/>
             <input
               type="text"
               placeholder="Option Value (e.g. M)"
@@ -82,22 +90,32 @@ export default function AddVariantForm({ productId, onSuccess }) {
               className="border px-2 py-1 rounded w-1/2"
               required
             />
+
+            </span>
+           
             {fields.length > 1 && (
               <button type="button" onClick={() => removeField(index)} className="text-red-500">
                 ✕
               </button>
             )}
-          </div>
-        ))}
-        <button
+           
+          <button
           type="button"
           onClick={addField}
           className="text-sm text-blue-600 underline"
-        >
+          >
           + Add Another Option
-        </button>
-      </div>
+          </button>
+            </div>
 
+          </div>
+        ))}
+        
+      </div>
+      <div className={styles.prodInputsContain}> 
+      <span>
+      <lable className={styles.label}>Price</lable>
+      <br/>
       <input
         type="number"
         step="0.01"
@@ -107,7 +125,10 @@ export default function AddVariantForm({ productId, onSuccess }) {
         className="border px-2 py-1 rounded w-full"
         required
       />
-
+      </span>
+      <span>
+      <lable className={styles.label}>Quantity</lable>
+      <br/>
       <input
         type="number"
         placeholder="Quantity"
@@ -116,8 +137,8 @@ export default function AddVariantForm({ productId, onSuccess }) {
         className="border px-2 py-1 rounded w-full"
         required
       />
-
-      <label className="flex items-center gap-2">
+      </span>
+      <label className={styles.label}>
         <input
           type="checkbox"
           checked={trackQty}
@@ -126,13 +147,17 @@ export default function AddVariantForm({ productId, onSuccess }) {
         Track Quantity
       </label>
 
+
+      </div>
+      <div className={styles.prodInputsContain}>
       <button
         type="submit"
         disabled={loading}
-        className="bg-green-600 text-white px-4 py-2 rounded"
+        className={styles.Btn}
       >
         {loading ? 'Adding...' : 'Add Variant'}
       </button>
+      </div>
     </form>
   )
 }

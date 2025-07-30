@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react'
 import { addcategory } from '../../utils/admincalls'
-
-function AddCategorie({ onSuccess }) {
+import styles from './addCategory.module.css'
+function AddCategorie({ onSuccess,closemod }) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [status, setStatus] = useState(null)
@@ -23,22 +23,28 @@ function AddCategorie({ onSuccess }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className={styles.contain}>
+    <button onClick={()=>{closemod(false)}} className={styles.closeBtn}>x</button>
+    <form onSubmit={handleSubmit} className={styles.from}>
+    <label>Category Name</label>
       <input
         type='text'
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder='Name'
       />
+      <lable>Description</lable>
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder='Description'
+        className={styles.textArea}
       />
-      <button type='submit'>Add Category</button>
+      <button type='submit' className={styles.Btn}>Add Category</button>
       {status === 'success' && <p>✅ Category added!</p>}
       {status === 'error' && <p>❌ Failed to add category.</p>}
     </form>
+    </div>
   )
 }
 
