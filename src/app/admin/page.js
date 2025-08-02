@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, CardDescription, CardTitle } from '../../components/ui/card'
 import styles from './admin.module.css'
 import { getOrders, getOrdersPAID } from '../libs/product'
-
+import UpLoadHero from '../components/UploadHero/UpLoadHero'
 export const revalidate = 600 //revalidate every 10min
 async function Admin() {
   let res = await getOrders()
@@ -26,6 +26,18 @@ async function Admin() {
       {renderCard('sales', `total sales: ${totalSalesAmount}`)}
       {renderCard('customers', `total customers: ${customerNum}`)}
       {renderCard('products', `product sales: ${totalSales.toFixed(2)}`)}
+      <UpLoadHero
+      heroNum={1}
+      />
+      <UpLoadHero
+      heroNum={2}
+      />
+      <UpLoadHero
+      heroNum={3}
+      />
+      <UpLoadHero
+      heroNum={4}
+      />
     </div>
   )
 }

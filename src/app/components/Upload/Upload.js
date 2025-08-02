@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 
-export default function Upload({prod,onImageChange}) {
+export default function Upload({ prod, onImageChange }) {
   const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(false); // 🔹 Add loading state
 
   const handleUpload = async (e) => {
     const file = e.target.files[0];
@@ -11,25 +12,35 @@ export default function Upload({prod,onImageChange}) {
 
     const reader = new FileReader();
 
+    setLoading(true); // 🔹 Start loading
+
     reader.onloadend = async () => {
       const base64String = reader.result.split(",")[1]; // Remove data URL prefix
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fileBase64: base64String,
-          fileName: `${prod.id}/${file.name}`,
-        }),
-      });
+      try {
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fileBase64: base64String,
+            fileName: `${prod.id}/${file.name}`,
+          }),
+        });
 
-      const data = await res.json();
-      if (data.url) {
-        
-        onImageChange((prev) => ({ ...prev, imagePath: data.url}));
-      } else {
-        alert("Upload failed");
-        console.error(data);
+        const data = await res.json();
+
+        if (data.url) {
+          setUrl(data.url); // 🔹 Save uploaded URL locally
+          onImageChange((prev) => ({ ...prev, imagePath: data.url }));
+        } else {
+          alert("Upload failed");
+          console.error(data);
+        }
+      } catch (err) {
+        console.error("Upload error:", err);
+        alert("An error occurred during upload.");
+      } finally {
+        setLoading(false); // 🔹 Stop loading
       }
     };
 
@@ -39,7 +50,15 @@ export default function Upload({prod,onImageChange}) {
   return (
     <div>
       <input type="file" onChange={handleUpload} />
-      {url && <p>Image uploaded: <a href={url} target="_blank">{url}</a></p>}
+      {loading && <p>Uploading...</p>}
+      {!loading && url && (
+        <p>
+          Image uploaded:{" "}
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            {url}
+          </a>
+        </p>
+      )}
     </div>
   );
 }
