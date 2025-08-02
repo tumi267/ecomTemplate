@@ -51,14 +51,7 @@ export default function Upload({ prod, onImageChange }) {
     <div>
       <input type="file" onChange={handleUpload} />
       {loading && <p>Uploading...</p>}
-      {!loading && url && (
-        <p>
-          Image uploaded:{" "}
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            {url}
-          </a>
-        </p>
-      )}
+
     </div>
   );
 }

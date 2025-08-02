@@ -123,7 +123,7 @@ export default function SalesSummary({
       {/* Today's Orders Card */}
       <div className={styles.card}>
         <div className={styles.cardHeader}>
-          <h3 className={styles.cardTitle}>Today's Orders</h3>
+          <h3 className={styles.cardTitle}>Today&#39;s Orders</h3>
           <p className={styles.cardValue}>{ordersToday}</p>
         </div>
       </div>

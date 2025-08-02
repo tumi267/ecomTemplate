@@ -7,7 +7,7 @@ import AddToCartButton from '../../../components/AddToCartButton/AddToCartButton
 import styles from './product.module.css'
 import { getSingleProduct } from '../../../utils/admincalls'
 import Image from 'next/image'
-
+import { useMemo } from 'react';
 // Compare two sets of options for equality
 const isMatchingOptions = (optionsA = {}, optionsB = {}) => {
   const keysA = Object.keys(optionsA)
@@ -41,13 +41,15 @@ function Page() {
     fetchProduct()
   }, [id])
 
-  const variants = prodinfo.variants || []
+  const variants = useMemo(() => prodinfo.variants || [], [prodinfo.variants]);
 
-  const uniqueTypes = [
-    ...new Set(
-      variants.flatMap(v => Object.keys(v.options || {}))
-    )
-  ]
+  const uniqueTypes = useMemo(() => {
+    return [
+      ...new Set(
+        variants.flatMap(v => Object.keys(v.options || {}))
+      )
+    ];
+  }, [variants]);
 
   useEffect(() => {
     if (!variants.length) return

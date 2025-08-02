@@ -32,7 +32,7 @@ function CategoryPage() {
       if (categories.length === 0) {
         fetchCategories()
       }
-    },[])
+    },[categories.length, fetchCategories])
   
   return (
     <div>

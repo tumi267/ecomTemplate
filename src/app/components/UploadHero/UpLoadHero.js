@@ -18,7 +18,9 @@ function UpLoadHero({heroNum}) {
                 headers: { 'Content-Type': 'application/json' },
                 body:JSON.stringify({id:heroNum,imageUrl:herourl.imagePath,altText:`hero${heroNum}`,position:heroNum})
             })
-       
+       if(res){
+        alert('success')
+       }
 
         };
   return (

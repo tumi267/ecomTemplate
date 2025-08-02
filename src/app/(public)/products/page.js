@@ -24,7 +24,7 @@ function Product() {
       fetchCategories()
     }
       
-  },[])
+  },[categories.length, fetchCategories])
   return (
     <div>
       <ProductFillter

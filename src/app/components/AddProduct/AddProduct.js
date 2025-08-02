@@ -133,7 +133,7 @@ export default function AddProduct({ onSuccess,closeAdd }) {
         className="border px-3 py-2 rounded"
       >
         <option value="true">Track Quantity</option>
-        <option value="false">Don't Track Quantity</option>
+        <option value="false">Don&#39;t Track Quantity</option>
       </select>
       <br/>
       <select

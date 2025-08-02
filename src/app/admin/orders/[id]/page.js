@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { getSingleOrder, processOrder, timeAgo } from '../../../utils/admincalls'
 import styles from './OrdersId.module.css'
+import Image from 'next/image'
 
 function OrdersId() {
   const params = useParams()
@@ -159,7 +160,7 @@ function OrdersId() {
         {productinfo.map((e, i) => (
           <div key={i} className={styles.productCard}>
             <div className={styles.productImageContainer}>
-              <img 
+              <Image 
                 src={e.product?.imagePath} 
                 alt={e.product?.name} 
                 className={styles.productImage}
