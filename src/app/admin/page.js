@@ -6,7 +6,7 @@ import UpLoadHero from '../components/UploadHero/UpLoadHero'
 export const revalidate = 600 //revalidate every 10min
 async function Admin() {
   let res = await getOrders()
-  let customerNum = res.map(e => e.customerName).length
+  let customerNum = new Set(res.map(e => e.customerName)).size;
 
   let paidOrders = await getOrdersPAID()
   let salesData = paidOrders.map(e => JSON.parse(e.productJSON)) // This is an array of arrays
