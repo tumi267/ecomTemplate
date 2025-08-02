@@ -1,4 +1,4 @@
-import 'dotenv/config'
+
 import { PrismaClient } from '@prisma/client'
 
 // Prevent multiple instances in dev
