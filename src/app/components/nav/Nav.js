@@ -6,6 +6,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCartStore } from '../../libs/store'
 import { useMenuStore } from '../../../app/libs/menu';
 import MouseOverCart from '../mouseOverCart/MouseOverCart';
+import LoginUser from '../LoginUser/LoginUser'
 
 function Nav() {
   const [isMounted, setIsMounted] = useState(false)
@@ -57,7 +58,7 @@ function Nav() {
         <li><button className={styles.link} 
         onClick={()=>{openMenu()}}>menu</button></li>
         <span className={styles.right_nav}>
-          
+          <LoginUser/>
           <span className={styles.cart}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}

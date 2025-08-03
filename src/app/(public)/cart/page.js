@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useCartStore } from '../../libs/store'
 import RemoveItem from '../../components/RemoveCartItem/RemoveCartItem'
 import AddToCartButton from '../../components/AddToCartButton/AddToCartButton'
@@ -7,12 +7,13 @@ import ClearCart from '../../components/ClearCart/ClearCart'
 import styles from './cart.module.css'
 import Image from 'next/image'
 import PayFastCheckoutButton from '../../components/PayFastCheckoutButton/PayFastCheckoutButton'
-
+import { useUserStore } from '../../libs/useUserStore'
 function Cart() {
   const items = useCartStore((state) => state.items)
   const incrementItem = useCartStore((state) => state.incrementItem)
   const decrementItem = useCartStore((state) => state.decrementItem)
   const totalCost = useCartStore((state) => state.total)
+  const user = useUserStore(state => state.user)
   const[customer,setCustomer]=useState({
     name:"",
     phone:"",
@@ -22,6 +23,18 @@ function Cart() {
     city:"",
     suburb:"",
   })
+
+  useEffect(() => {
+    if (user) {
+      setCustomer(prev => ({
+        ...prev,
+        name: user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : '',
+        email: user.email || '',
+        phone: user.phone || '',
+        // Add address fields here if you store them in Zustand user too
+      }))
+    }
+  }, [user])
   const handleChange = (e) => {
     setCustomer((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }

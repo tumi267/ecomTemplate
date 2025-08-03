@@ -119,7 +119,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/app/api/createUser/route.js"  ],
   "exclude": [
     "node_modules"
   ]

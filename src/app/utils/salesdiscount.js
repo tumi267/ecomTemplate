@@ -9,14 +9,3 @@ export function calculateDiscount(costPrice, originalPrice, desiredProfitMargin)
     return discountAmount > 0 ? discountAmount : 0;
   }
   
-
-
-
-
-  //   // Example:
-//   const cost = 50;
-//   const original = 100;
-//   const desiredMargin = 0.3; // 30%
-  
-//   const discount = calculateDiscount(cost, original, desiredMargin);
-//   console.log(`Discount amount: $${discount.toFixed(2)}`);

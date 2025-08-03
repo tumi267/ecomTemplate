@@ -164,6 +164,8 @@ function OrdersId() {
                 src={e.product?.imagePath} 
                 alt={e.product?.name} 
                 className={styles.productImage}
+                width={100}
+                height={100}
                 onError={(e) => {
                   e.target.src = '/placeholder-product.png'
                 }}

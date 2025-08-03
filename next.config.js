@@ -7,7 +7,10 @@ const nextConfig = {
             hostname: 'tpmjohhfasdshvfvicxc.supabase.co', // add any other domains you use
           },
         ],
-    }
+    },
+    experimental: {
+      serverActions: true,
+    },
 }
 
 module.exports = nextConfig

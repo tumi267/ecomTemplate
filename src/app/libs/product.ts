@@ -324,11 +324,22 @@ export async function createOrder(data: {
 }
 // get orders
 
+
 export async function getOrders() {
   return await prisma.order.findMany({orderBy: {
     createdAt: 'desc', // Newest orders first
   },})
 }
+
+export async function getuserOrders(customerEmail: string) {
+  return await prisma.order.findMany({
+    where: { customerEmail }, // Filters orders by the user's email
+    orderBy: {
+      createdAt: 'desc', // Newest orders first
+    },
+  })
+}
+
 
 export async function getSingleOrder(id: string){
   return await prisma.order.findUnique({

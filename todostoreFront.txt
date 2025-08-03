@@ -15,3 +15,8 @@ product{
 // admin   
     supplier
     Available to Public
+    csv import/export
+    customer
+    email/whatsapp
+    rate of sale 
+    

@@ -10,7 +10,7 @@
     const mode = process.env.NEXT_DEV
     const baseUrl = process.env.NEXT_PUBLIC_PUBLIC_URL || process.env.PUBLIC_URL
     const localenv = 'http://localhost:3000'
-    const ngrokserver ='https://c85528326a12.ngrok-free.app'
+    const ngrokserver ='https://030291ced527.ngrok-free.app'
     
   
   const data = {

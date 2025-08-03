@@ -3,6 +3,7 @@ import '../globals.css';
 import Nav from '../components/nav/Nav';
 import Dawer from '../components/Dawer/Dawer';
 
+
 const inter = Inter({ subsets: ['latin'] });
 
 export default function PublicLayout({ children }) {
