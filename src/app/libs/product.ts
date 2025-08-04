@@ -143,6 +143,38 @@ export async function updateProduct(
     data: updateData,
   })
 }
+export async function updateProductSale(productId:string,quantity:number,variantId:string) {
+  const [updatedProduct, newSale] = await prisma.$transaction([
+    prisma.product.update({
+      where: { id: productId },
+      data: { unitsSold: { increment: quantity } },
+    }),
+    prisma.productSale.create({
+      data: {
+        productId,
+        variantId: variantId || null,
+        quantity,
+        soldAt: new Date(),
+      },
+    }),
+  ]);
+
+  return {
+    updatedProduct,
+    newSale,
+  };
+}
+
+// get product sales
+export async function getProductSales(productID:string) {
+  return await prisma.productSale.findMany({
+    where: {
+      productId: productID,
+    },
+  })
+}
+
+
 
 // Delete a product
 export async function deleteProduct(id: string) {

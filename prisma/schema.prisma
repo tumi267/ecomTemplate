@@ -2,7 +2,6 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
   provider = "prisma-client-js"
-
 }
 
 datasource db {
@@ -10,7 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Use enum for currencies, add more as needed
+// Enums
 enum Currency {
   ZAR
   USD
@@ -44,6 +43,21 @@ enum PaymentStatus {
   PARTIALLY_REFUNDED
 }
 
+// Supplier
+model Supplier {
+  id        String    @id @default(uuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  products  Product[]
+}
+
+// Category
 model Category {
   id          String    @id @default(uuid())
   name        String
@@ -52,9 +66,10 @@ model Category {
   products    Product[]
 }
 
+// Product
 model Product {
   id                     String    @id @default(uuid())
-  sku                    String?   @unique  // SKU or barcode for inventory
+  sku                    String?   @unique
   categoryId             String
   category               Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
@@ -64,43 +79,64 @@ model Product {
 
   currency               Currency  @default(ZAR)
 
-  isAvailableForPurchase Boolean   @default(true)
+  isAvailableForPurchase Boolean   @default(true)   // for internal visibility
+  availableToPublic      Boolean   @default(true)   // for store visibility
   bestSeller             Boolean   @default(false)
   weekSale               Boolean   @default(false)
   discount               Float     @default(0)
 
   cost                   Decimal   @default(0)
-  price                  Decimal   // base price
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
+  price                  Decimal
   qty                    Int
   trackQty               Boolean
-  variants               Variant[]
+  unitsSold              Int       @default(0)
 
+  supplierId             String?
+  supplier               Supplier? @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  variants               Variant[]
+  sales                  ProductSale[]
 }
 
+// Variant
 model Variant {
   id          String   @id @default(uuid())
   productId   String
   product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  options      Json
-  price       Decimal  // can differ from base product price
+  options     Json
+  price       Decimal
   qty         Int
   trackQty    Boolean
+  unitsSold   Int      @default(0)
+  firstListed DateTime @default(now())
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   cartItems   CartItem[]
-  
 }
 
+// Track individual product sales (for time-based rate of sale)
+model ProductSale {
+  id         String   @id @default(uuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  variantId  String?
+  quantity   Int
+  soldAt     DateTime @default(now())
+  createdAt  DateTime @default(now())
+}
+
+// User
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   name      String?
 
-  // Optional user address for shipping
   addressLine1  String?
   addressLine2  String?
   city          String?
@@ -115,82 +151,79 @@ model User {
   carts     Cart[]
 }
 
+// Order
 model Order {
-  id         String      @id @default(uuid())
-  userId     String?
-  productJSON String     // Stores serialized order items
-  price      Decimal     // Total order amount
-  
-  status     OrderStatus @default(PENDING)
-  paymentStatus PaymentStatus @default(PENDING)
-  
-  // Shipping information
+  id               String        @id @default(uuid())
+  userId           String?
+  productJSON      String
+  price            Decimal
+  status           OrderStatus   @default(PENDING)
+  paymentStatus    PaymentStatus @default(PENDING)
+
   shippingAddressLine1  String?
   shippingAddressLine2  String?
   shippingCity          String?
   shippingProvince      String?
   shippingPostalCode    String?
   shippingCountry       String?
-  
-  // Customer information
-  customerName   String?
-  customerEmail  String?
-  customerPhone  String?
-  
-  // Payment metadata (optional but recommended)
-  paymentMethod  String?
-  paymentId      String?  // Reference from payment processor
-  paidAt         DateTime?
-  
-  // Timestamps
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  
-  // Relations
-  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  CourierTracking     CourierTracking?
+
+  customerName     String?
+  customerEmail    String?
+  customerPhone    String?
+
+  paymentMethod    String?
+  paymentId        String?
+  paidAt           DateTime?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user             User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  CourierTracking  CourierTracking?
 }
 
-
-// Shopping cart per user
+// Cart
 model Cart {
-  id        String      @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     CartItem[]
 }
 
+// CartItem
 model CartItem {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   cartId      String
   variantId   String
-  quantity    Int       @default(1)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  quantity    Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 
-  cart        Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  variant     Variant   @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  cart        Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant     Variant  @relation(fields: [variantId], references: [id], onDelete: Restrict)
 }
 
+// CourierTracking
 model CourierTracking {
-  id             String         @id @default(cuid())
-  orderId        String         @unique
-  order          Order          @relation(fields: [orderId], references: [id])
-  status         CourierStatus
-  trackingNumber String?
-  carrier        String?        // e.g., DHL, Fastway, Aramex
+  id               String        @id @default(cuid())
+  orderId          String        @unique
+  order            Order         @relation(fields: [orderId], references: [id])
+  status           CourierStatus
+  trackingNumber   String?
+  carrier          String?
   estimatedArrival DateTime?
-  updatedAt      DateTime       @updatedAt
-  createdAt      DateTime       @default(now())
+  updatedAt        DateTime      @updatedAt
+  createdAt        DateTime      @default(now())
 }
 
+// Hero section for homepage
 model Hero {
   id        Int      @id @default(autoincrement())
   imageUrl  String
   altText   String
-  position  Int      @unique // position/order of hero on the homepage, e.g. 1, 2, 3
+  position  Int      @unique
   createdAt DateTime @default(now())
 }

@@ -7,6 +7,7 @@ import { getSingleProduct } from '../../../utils/admincalls'
 import AddVariantForm from '../../../components/AddVariant/AddVariant'
 import UpdateVariantForm from '../../../components/UpdateVariantForm/UpdateVariantForm'
 import { calculateDiscount } from '../../../utils/salesdiscount'
+import AdminQty from '../../../components/adminQty/AdminQty'
 
 function EditProduct() {
   const params = useParams()
@@ -39,6 +40,8 @@ function EditProduct() {
 
   return (
     <div>
+      <AdminQty
+      product={product}/>
       <UpdateProduct
         product={product}
         onSuccess={fetchProduct}

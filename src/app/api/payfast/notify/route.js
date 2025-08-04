@@ -1,7 +1,7 @@
 // /app/api/payfast/notify/route.js
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { getSingleOrder, proccessOrder } from '../../../libs/product'; // You must implement this
+import { getSingleOrder, proccessOrder, updateProductSale } from '../../../libs/product'; // You must implement this
 
 export async function POST(req) {
   const rawText = await req.text();
@@ -28,6 +28,10 @@ export async function POST(req) {
  switch (paymentStatus) {
   case 'COMPLETE':
     await proccessOrder( orderid,product,"PENDING",'PAID');
+    for (const item of productItems) {
+      const { productId, variantId, quantity } = item;
+    await updateProductSale(productId,variantId,quantity)
+    }
     break;
 
   case 'FAILED':

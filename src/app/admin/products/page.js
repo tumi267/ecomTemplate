@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '../../../components/ui/table'
-
+import AdminQty from '../../components/adminQty/AdminQty'
 function Products() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -45,7 +45,7 @@ function Products() {
 
   if (loading) return <div className="p-6">Loading products...</div>
   if (error) return <div className="p-6 text-red-500">Error: {error}</div>
-
+ 
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
@@ -65,14 +65,17 @@ function Products() {
               <TableHead className={styles.theader}>Name</TableHead>
               <TableHead className={styles.theader}>Description</TableHead>
               <TableHead className={styles.theader}>Price</TableHead>
+              <TableHead className={styles.theader}>qty</TableHead>
               <TableHead className={styles.theader}>Discount</TableHead>
               <TableHead className={styles.theader}>Actions</TableHead>
             </TableRow>
           </TableHeader >
           <TableBody>
             {products.map((product) => (
+             
               <TableRow key={product.id} className={styles.tablerow}>
                 {renderCard(product, fetchProducts)}
+                
               </TableRow>
             ))}
           </TableBody>
@@ -82,7 +85,7 @@ function Products() {
   )
 }
 
-const renderCard = (product, fetchProducts) => {
+const renderCard = (product, fetchProducts,salesdata) => {
   const inStock = product.variants?.some(
     (v) => v.trackQty === false || v.qty > 0
   )
@@ -126,12 +129,24 @@ const renderCard = (product, fetchProducts) => {
       <TableCell className="font-bold">
         R {product.weekSale ? (product.price - (product.discount || 0)).toFixed(2) : product?.price}
       </TableCell>
+      <TableCell>
 
+        {/* input sales data here */}
+      <AdminQty
+      product={product}
+      />
+      </TableCell>
       <TableCell>
         {product.weekSale ? (
-          <span className="text-green-600">
+          
+            <select>
+              <option>
             R{product.discount} 
-          </span>
+            </option>
+            <option>
+          <CreateDiscount product={product} onSuccess={fetchProducts} />
+          </option>
+          </select>
         ) : (
           <CreateDiscount product={product} onSuccess={fetchProducts} />
         )}
