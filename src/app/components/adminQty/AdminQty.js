@@ -66,7 +66,7 @@ function AdminQty({ product }) {
   return (
     <div>
       <p>Stock: {stockQty}</p>
-      <p>Last Month's Sales: {salesQty}</p>
+      <p>Last Month&apos;s Sales: {salesQty}</p>
       {lowStockWarning && (
         <p style={{ color: 'red' }}>
           ⚠️ Low stock – projected to run out in less than a week
