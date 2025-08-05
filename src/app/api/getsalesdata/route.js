@@ -19,8 +19,9 @@ export async function POST(req) {
       const soldAt = new Date(sale.soldAt) // handle 'YYYY-MM-DD HH:mm:ss' format
       return soldAt.getTime() >= fourWeeksAgo.getTime() && soldAt.getTime() <= now.getTime()
     })
-     
-      return NextResponse.json({updated,recentSales})
+    const totalSold = recentSales.reduce((sum, sale) => sum + sale.quantity, 0)
+    const velocity = (totalSold / 28).toFixed(1)
+      return NextResponse.json({updated,recentSales,velocity})
     } catch (err) {
       return NextResponse.json({ error: 'Failed to get data' }, { status: 500 })
     }

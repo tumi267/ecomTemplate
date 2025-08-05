@@ -170,6 +170,25 @@ function timeAgo(date) {
 
   return 'just now'
 }
+
+const getsupplier=async(id)=>{
+  const res = await fetch('/api/supllier',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({id})
+  })
+  if (!res.ok) throw new Error('Failed to update variant')
+  return res.json()
+}
+const updateSupplier=async(id,suplierdata,product)=>{
+  const res = await fetch('/api/supllier',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({id,suplierdata:suplierdata,product:product})
+  })
+  if (!res.ok) throw new Error('Failed to update variant')
+  return res.json()
+}
 export {
   addcategory,
   updatecategory,
@@ -188,4 +207,6 @@ export {
   getSingleOrder,
   timeAgo,
   processOrder,
+  getsupplier,
+  updateSupplier
 }

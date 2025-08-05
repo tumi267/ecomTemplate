@@ -6,6 +6,7 @@ import Upload from '../Upload/Upload'
 import Image from 'next/image'
 import styles from './updateProduct.module.css'
 import {Button} from '../../../components/ui/button'
+import ProductMetrics  from '../ProductMetrics/ProductMetrics'
 export default function UpdateProduct({ product, onSuccess }) {
   const [formData, setFormData] = useState({
     name: '',
@@ -14,7 +15,7 @@ export default function UpdateProduct({ product, onSuccess }) {
     price: '',
     cost:'',
     categoryId: '',
-    supplierId: '',
+    isAvailableForPurchase:false
   })
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(false)
@@ -43,6 +44,7 @@ export default function UpdateProduct({ product, onSuccess }) {
         price: product.price || '',
         categoryId: product.categoryId || '',
         cost:product.cost||'',
+        isAvailableForPurchase:product.isAvailableForPurchase
       })
     }
   }, [product])
@@ -50,7 +52,9 @@ export default function UpdateProduct({ product, onSuccess }) {
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
-
+  const handleCheckboxChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.checked }))
+  }
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -96,6 +100,25 @@ export default function UpdateProduct({ product, onSuccess }) {
         required
         className="border px-3 py-2 rounded"
       />
+      {/* Availability Toggle */}
+      <div className={styles.prodInputsContain}>
+        <label className={styles.label}>
+          <input
+            type="checkbox"
+            name="isAvailableForPurchase"
+            checked={formData.isAvailableForPurchase}
+            onChange={handleCheckboxChange}
+            className="mr-2"
+          />
+          Available for Purchase
+        </label>
+        <ProductMetrics 
+      price={parseFloat(formData.price)} 
+      cost={parseFloat(formData.cost)}
+      productId={product?.id}
+      />
+      </div>
+
       </div>
       <hr/>
       <label className={styles.label}>Description</label>
@@ -128,25 +151,7 @@ export default function UpdateProduct({ product, onSuccess }) {
       </div>
       <hr/>
       <div>
-      <div>
-      <label className={styles.label}>Supplier</label>
-        <br />
-          <select
-            name="supplierId"
-            value={formData.supplierId}
-            onChange={handleChange}
-            required
-          >
-          <option value="" disabled>
-            Select Supplier
-          </option>
-          {suppliers.map((sup) => (
-          <option key={sup.id} value={sup.id}>
-            {sup.name}
-          </option>
-          ))}
-        </select>
-        </div>
+
         </div>
         <hr/>
       <div className={styles.prodInputsContain}>
@@ -179,7 +184,7 @@ export default function UpdateProduct({ product, onSuccess }) {
       />
       </span>
       <span>
-      <label className={styles.label}>categoy</label>
+      <label className={styles.label}>category</label>
       <br/>
       <select
         name="categoryId"
@@ -209,6 +214,7 @@ export default function UpdateProduct({ product, onSuccess }) {
         {loading ? 'Updating...' : 'Update Product'}
       </button>
       </div>
+
     </form>
   )
 }

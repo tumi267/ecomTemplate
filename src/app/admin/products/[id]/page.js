@@ -8,7 +8,7 @@ import AddVariantForm from '../../../components/AddVariant/AddVariant'
 import UpdateVariantForm from '../../../components/UpdateVariantForm/UpdateVariantForm'
 import { calculateDiscount } from '../../../utils/salesdiscount'
 import AdminQty from '../../../components/adminQty/AdminQty'
-
+import Supplier from '../../../components/Supplier/Supplier'
 function EditProduct() {
   const params = useParams()
   const { id } = params
@@ -22,6 +22,7 @@ function EditProduct() {
     try {
       const res = await getSingleProduct(id)
       setProduct(res)
+   
     } catch (err) {
       console.error('Failed to load product', err)
     } finally {
@@ -87,7 +88,13 @@ function EditProduct() {
         productId={product.id}
         onSuccess={fetchProduct}
       />
+        
+      <Supplier
+      supplierId={product.supplierId}
+      product={product}
+      />
     </div>
+
   )
 }
 

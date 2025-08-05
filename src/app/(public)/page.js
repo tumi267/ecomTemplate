@@ -1,3 +1,4 @@
+
 import Image from 'next/image'
 import db from '../libs/db.json'
 import Hero from '../components/hero/Hero'
