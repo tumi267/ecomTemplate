@@ -14,10 +14,12 @@ export default function UpdateProduct({ product, onSuccess }) {
     price: '',
     cost:'',
     categoryId: '',
+    supplierId: '',
   })
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [suppliers, setSuppliers] = useState([])
 
   useEffect(() => {
     async function fetchCategories() {
@@ -108,7 +110,10 @@ export default function UpdateProduct({ product, onSuccess }) {
         required
         className={styles.textArea}
       />
+      
+
       <div>
+        
       <div className={styles.imageContain}>
       <Image src={formData?.imagePath?formData.imagePath:'/next.svg'} alt={formData.name} fill />
       </div>
@@ -119,8 +124,31 @@ export default function UpdateProduct({ product, onSuccess }) {
         onImageChange={setFormData}
       />
       </div>
+      
       </div>
       <hr/>
+      <div>
+      <div>
+      <label className={styles.label}>Supplier</label>
+        <br />
+          <select
+            name="supplierId"
+            value={formData.supplierId}
+            onChange={handleChange}
+            required
+          >
+          <option value="" disabled>
+            Select Supplier
+          </option>
+          {suppliers.map((sup) => (
+          <option key={sup.id} value={sup.id}>
+            {sup.name}
+          </option>
+          ))}
+        </select>
+        </div>
+        </div>
+        <hr/>
       <div className={styles.prodInputsContain}>
       <span>
       <label className={styles.label}>Price</label>
