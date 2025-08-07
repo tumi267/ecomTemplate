@@ -7,6 +7,8 @@ import AddCategorie from '../../components/AddCategorie/AddCategorie'
 import UpdateCategorie from '../../components/updatecategory/updatecategory'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
 import styles from './categories.module.css'
+import ImportCategores from '../../components/DragAndDrop/ImportCategores'
+import ExportButton from '../../components/exportcsv/ExportButton'
 function Categories() {
   const [categories, setCategories] = useState([])
   const [editId, setEditId] = useState(null)
@@ -30,6 +32,8 @@ if(isloading){
   return (
     <div>
       <h2>Categories</h2>
+      <ExportButton api={`export/categories`} name="categories" />
+      <ImportCategores/>
       <button onClick={()=>{setAddcategory(true)}} className={styles.Btn}>Add Category</button>
       {addCategorie&&<AddCategorie onSuccess={fetchCategories} closemod={setAddcategory} />}
 

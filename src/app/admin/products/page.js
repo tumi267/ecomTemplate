@@ -17,6 +17,8 @@ import {
   TableRow,
 } from '../../../components/ui/table'
 import AdminQty from '../../components/adminQty/AdminQty'
+import ImportProducts from '../../components/DragAndDrop/Importprodutcs'
+import ExportButton from '../../components/exportcsv/ExportButton'
 function Products() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -51,9 +53,10 @@ function Products() {
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Products</h2>
+        <ImportProducts/>
         {addProd?<AddProduct onSuccess={fetchProducts} closeAdd={setAddProd} />:<button onClick={()=>{setAddProd(true)}} className={styles.Btn}>Add Product</button>}
       </div>
-
+      <ExportButton api="export/products" name="products" />
       {products.length === 0 ? (
         <div className="text-center py-8">
           <p className="text-gray-500">No products found</p>

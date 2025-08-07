@@ -5,26 +5,29 @@ nav{
    - search
    -favourites
 }
-cards{
+cart{
     -favourites
+    Shipping calculation	❌
+    Taxes (manual or automated)	❌
+ 
 }
 product{
     favourites
+    Related products / recommendations	❌
+    Product reviews / ratings
 }
-
+Multi-channel sales{
+    Facebook, Instagram, POS //weekend
+}
 // admin   
- 
-
-    csv import/export
-  
-    email/whatsapp
+    email/whatsapp //tommorrow
     Analytics Additions //google
+    Restock Date Input: Track when more stock is expected
+    Coupons / Discount codes	❌
+    Abandoned cart tracking	❌
 
 
-    Restock Date Input: Track when more stock is expected// supplier note
-    
-
-
+//Build out marketing & SEO features
 
 // Missing for a Top-Tier Ecommerce Product
 1. Full Courier & Logistics Integration

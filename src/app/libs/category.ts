@@ -34,7 +34,13 @@ export async function createCategory(data: {
       where: { id },
     })
   }
-
+  export async function UniqueCategory(name:string) {
+    return await prisma.category.findUnique({
+      where: {
+        name,
+      },
+    })
+  }
   // hero
 
   export async function getHeroes() {

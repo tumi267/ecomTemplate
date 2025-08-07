@@ -183,6 +183,23 @@ export async function deleteProduct(id: string) {
   })
 }
 
+//get product unique by 
+export async function uniqeProduct(sku: string) {
+  return await prisma.product.findUnique({
+    where: {
+      sku,
+    },
+  })
+}
+
+export async function findCategoryByName(name : string) {
+  return await prisma.category.findUnique({ where: { name } })
+}
+
+export async function findSupplierByEmail(email: string) {
+  return await prisma.supplier.findUnique({ where: { email } })
+}
+
 // ✅ Get all variants for a specific productId (required)
 export async function getVariants(productId: string) {
   if (!productId) {
@@ -362,7 +379,30 @@ export async function getOrders() {
     createdAt: 'desc', // Newest orders first
   },})
 }
+// get orders between
+export async function getOrdersbetween({
+  from,
+  to,
+}: {
+  from?: string;
+  to?: string;
+}) {
+  const filters: any = {};
 
+  if (from && to) {
+    filters.createdAt = {
+      gte: new Date(from),
+      lte: new Date(to),
+    };
+  }
+
+  return await prisma.order.findMany({
+    where: filters,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
 export async function getuserOrders(customerEmail: string) {
   return await prisma.order.findMany({
     where: { customerEmail }, // Filters orders by the user's email

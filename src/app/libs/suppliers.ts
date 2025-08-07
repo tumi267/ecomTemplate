@@ -31,3 +31,17 @@ export async function getSingleSupplier(id: string) {
       data,
     })
   }
+
+  export async function UniqueSupplier(email:string) {
+    return await prisma.supplier.findUnique({
+      where: {
+        email,
+      },
+    })
+  }
+
+  export async function getSuppliers() {
+    return await prisma.supplier.findMany({
+      include: { products: true },
+    })
+  }

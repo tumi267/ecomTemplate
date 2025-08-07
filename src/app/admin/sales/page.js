@@ -3,6 +3,7 @@ import { getOrdersPAID } from '../../libs/product';
 import SalesSummary from '../../components/SalesSummery/SalesSummery';
 import TopPerformingProducts from '../../components/TopProcomingProducts/TopProformingProducts';
 import TopVariants from '../../components/TopVariants/TopVarianits';
+import ExportButton from '../../components/exportcsv/ExportButton';
 
 async function Sales() {
   const orders = await getOrdersPAID('PAID');
@@ -115,8 +116,12 @@ async function Sales() {
       }))
     : [];
 
+    // use state user will change by selecting dates
+let from='2025-07-26'
+let to='2025-08-03'
   return (
     <div className="p-6 space-y-8">
+      <ExportButton api={`export/sales?from=${from}&to=${to}`} name="sales" />
       <SalesSummary 
         totalPaid={totalPaid}
         totalOrders={totalOrders}
