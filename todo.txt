@@ -1,0 +1,6 @@
+
+Product browsing/catalog	
+Cart & checkout flow	User accounts (optional)	
+Payment & order processing	Email order confirmations (you got)	
+Inventory tracking	Basic analytics/dashboard	
+Shipping integration (if relevant)		Advanced reporting

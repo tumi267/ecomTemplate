@@ -16,15 +16,53 @@ product{
     Related products / recommendations	❌
     Product reviews / ratings
 }
-Multi-channel sales{
-    Facebook, Instagram, POS //weekend
-}
+
 // admin   
-    email/whatsapp //tommorrow
+ 
     Analytics Additions //google
-    Restock Date Input: Track when more stock is expected
+  
     Coupons / Discount codes	❌
-    Abandoned cart tracking	❌
+    Abandoned cart tracking	//upsell
+
+
+
+
+
+
+
+
+ Shipping options & rates configuration
+
+ Inventory management
+
+
+
+
+
+
+
+Ability to update status (pending, shipped, etc.)
+
+ Basic customer order tracking (frontend)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //Build out marketing & SEO features

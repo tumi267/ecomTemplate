@@ -143,27 +143,89 @@ export async function updateProduct(
     data: updateData,
   })
 }
-export async function updateProductSale(productId:string,quantity:number,variantId:string) {
-  const [updatedProduct, newSale] = await prisma.$transaction([
-    prisma.product.update({
-      where: { id: productId },
-      data: { unitsSold: { increment: quantity } },
-    }),
-    prisma.productSale.create({
-      data: {
-        productId,
-        variantId: variantId || null,
-        quantity,
-        soldAt: new Date(),
-      },
-    }),
-  ]);
+export async function updateProductSale(
+  productId: string,
+  quantity: number,
+  variantId?: string
+) {
+  const now = new Date();
 
-  return {
-    updatedProduct,
-    newSale,
-  };
+  if (variantId) {
+    // Fetch variant with its product
+    const variant = await prisma.variant.findUnique({
+      where: { id: variantId },
+      include: { product: true },
+    });
+
+    if (!variant) throw new Error("Variant not found");
+
+    const variantUpdates: any = {};
+    if (variant.trackQty && variant.qty >= quantity) {
+      variantUpdates.qty = { decrement: quantity };
+    }
+    variantUpdates.unitsSold = { increment: quantity };
+
+    const productUpdates: any = {
+      qty:{ decrement: quantity },
+      unitsSold: { increment: quantity },
+    };
+
+    const [updatedVariant, updatedProduct, newSale] = await prisma.$transaction([
+      prisma.variant.update({
+        where: { id: variantId },
+        data: variantUpdates,
+      }),
+      prisma.product.update({
+        where: { id: productId },
+        data: productUpdates,
+      }),
+      prisma.productSale.create({
+        data: {
+          productId,
+          variantId,
+          quantity,
+          soldAt: now,
+        },
+      }),
+    ]);
+
+    return { updatedVariant, updatedProduct, newSale };
+  } else {
+    // Fetch product
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!product) throw new Error("Product not found");
+
+    const productUpdates: any = {
+      qty:{ decrement: quantity },
+      unitsSold: { increment: quantity },
+    };
+
+    if (product.trackQty && product.qty >= quantity) {
+      productUpdates.qty = { decrement: quantity };
+    }
+
+    const [updatedProduct, newSale] = await prisma.$transaction([
+      prisma.product.update({
+        where: { id: productId },
+        data: productUpdates,
+      }),
+      prisma.productSale.create({
+        data: {
+          productId,
+          variantId: null,
+          quantity,
+          soldAt: now,
+        },
+      }),
+    ]);
+
+    return { updatedProduct, newSale };
+  }
 }
+
 
 // get product sales
 export async function getProductSales(productID:string) {
@@ -423,7 +485,7 @@ export async function proccessOrder(id: string,updatedItems:string,status:OrderS
   await prisma.order.update({
     where: {id},
     data: {
-      productJSON: updatedItems,
+      productJSON: JSON.stringify(updatedItems),
       status:status,
       paymentStatus:payment
     }
