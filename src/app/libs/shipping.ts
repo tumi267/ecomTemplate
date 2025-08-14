@@ -17,7 +17,7 @@ export async function getCourierByTracking(trackingNumber: string) {
     orderId: string
     trackingNumber?: string
     carrier?: string
-    status?: 'NOT_DISPATCHED' | 'SHIPPED' | 'IN_TRANSIT' | 'DELIVERED' | 'FAILED_ATTEMPT' | 'RETURNED_TO_SENDER'
+    status: 'NOT_DISPATCHED' | 'SHIPPED' | 'IN_TRANSIT' | 'DELIVERED' | 'FAILED_ATTEMPT' | 'RETURNED_TO_SENDER'
     estimatedArrival?: Date
   }) {
     return await prisma.courierTracking.create({
