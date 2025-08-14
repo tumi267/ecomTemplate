@@ -6,6 +6,7 @@ import { getOrders, getOrdersPAID } from '../libs/product'
 import UpLoadHero from '../components/UploadHero/UpLoadHero'
 
 export const revalidate = 600 //revalidate every 10min
+
 async function Admin() {
   let res = await getOrders()
   let customerNum = new Set(res.map(e => e.customerName)).size;

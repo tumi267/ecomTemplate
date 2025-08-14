@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import { getSingleOrder, processOrder, timeAgo } from '../../../utils/admincalls'
 import styles from './OrdersId.module.css'
 import Image from 'next/image'
+import mapStatus from '../../../utils/shippingcorrectin'
 
 function OrdersId() {
   const params = useParams()
@@ -14,6 +15,10 @@ function OrdersId() {
   const [processproduct, setprocessproduct] = useState([])
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState(false)
+  const [tracking,setTracking]=useState({
+    trackingNumber:null,
+    trackingStat:null
+  })
 
   useEffect(() => {
     const getData = async () => {
@@ -48,6 +53,21 @@ function OrdersId() {
     getData()
   }, [id])
 
+  useEffect(()=>{
+    
+    const getShipping=async (id)=>{
+      const res=await fetch('/api/shipping/create/getshipping',{method:'POST',headers:{"Content-Type":"application/json"},body:JSON.stringify({id:id})})
+      let data=await res.json()
+      setTracking({
+        trackingNumber: data?.data?.trackingNumber,
+        trackingStat: data?.data?.status
+      })
+    }
+    if(orderinfo?.id){
+      getShipping(orderinfo.id)
+    }
+  },[orderinfo])
+
   const handleProcess = async () => {
     if (!orderinfo || !processproduct) return
     setProcessing(true)
@@ -73,8 +93,91 @@ function OrdersId() {
       const totalProcessed = processproduct.reduce((sum, item) => sum + item.quantity, 0)
       const totalOriginal = original.reduce((sum, item) => sum + item.quantity, 0)
       const status = totalProcessed === totalOriginal ? 'FULFILLED' : 'PARTIALLY_PROCESSED'
+      // create shipping
+      const shippingBody = {
+        collection_address: {
+          type: "business",
+          company: "My Warehouse",          // your business/warehouse name
+          street_address: "267 Monaheng Sec",
+          local_area: "Tshabala Street",
+          city: "Katlehong",
+          zone: "GP",
+          country: "ZA",
+          code: "0181",
+        },
+        collection_contact: {
+          name: "Warehouse Manager",
+          mobile_number: "0123456789",      // optional
+          email: "warehouse@example.com",   // optional
+        },
+        delivery_address: {
+          type: "residential",
+          company: "",
+          street_address: orderinfo.shippingAddressLine1,
+          local_area: orderinfo.shippingAddressLine2 || "",
+          city: orderinfo.shippingCity,
+          zone: orderinfo.shippingProvince,
+          country: "ZA",
+          code: orderinfo.shippingPostalCode,
 
-      await processOrder(id, updated, status)
+        },
+        delivery_contact: {
+          name: orderinfo.customerName || "",
+          mobile_number: orderinfo.customerPhone || "",
+          email: orderinfo.customerEmail || "",
+        },
+        // this can be a bug in real life 
+        parcels: [
+          {
+            parcel_description: "Standard parcel",
+            submitted_length_cm: 20,
+            submitted_width_cm: 20,
+            submitted_height_cm: 10,
+            submitted_weight_kg: 2,
+          },
+        ],
+        special_instructions_collection: "This is a test shipment - DO NOT COLLECT",
+        special_instructions_delivery: "This is a test shipment - DO NOT DELIVER",
+        declared_value:parseFloat(orderinfo.price||0),
+    
+        collection_after: "08:00",
+        collection_before: "16:00",
+    
+        delivery_after: "10:00",
+        delivery_before: "17:00",
+
+        customer_reference: orderinfo.id,
+        service_level_code: "ECO",
+        mute_notifications: false,
+      }
+      const res = await fetch('/api/shipping/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(shippingBody),
+      })
+      if (!res.ok) {
+        const errText = await res.text()
+        throw new Error('Shipping creation failed: ' + errText)
+      }
+      
+      const shippingdata = await res.json()
+      const trackingData = {
+        orderId: orderinfo.id,
+        trackingNumber: shippingdata.short_tracking_reference,
+        carrier: "the courier guy",
+        status: mapStatus(shippingdata.status),
+        estimatedArrival: shippingdata.estimated_delivery_to
+          ? new Date(shippingdata.estimated_delivery_to)
+          : undefined,
+      }
+      
+      // call your API to store tracking info
+      await fetch('/api/shipping/create/front',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({...trackingData})
+      })
+      // await processOrder(id, updated, status)
       alert('Order processed successfully!')
     } catch (error) {
       console.error('Error processing order:', error)
@@ -83,6 +186,10 @@ function OrdersId() {
       setProcessing(false)
     }
   }
+
+
+
+  
 
   if (loading) {
     return (
@@ -115,6 +222,9 @@ function OrdersId() {
             <p className={styles.statusBadge}>{orderinfo.status}</p>
             <p className={styles.date}>{timeAgo(orderinfo.createdAt)}</p>
             <p className={styles.orderId}>Order #{orderinfo.id}</p>
+            {tracking.trackingNumber&&<p>Tracking # {tracking.trackingNumber}</p>}
+            {tracking.trackingStat&&<p>Tracking status {tracking.trackingStat}</p>}
+           
           </div>
         </div>
 

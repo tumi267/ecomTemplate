@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "CourierStatus" ADD VALUE 'COLLECTION_ASSIGNED';

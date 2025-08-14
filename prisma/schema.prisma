@@ -28,6 +28,7 @@ enum OrderStatus {
 
 enum CourierStatus {
   NOT_DISPATCHED
+  COLLECTION_ASSIGNED
   SHIPPED
   IN_TRANSIT
   DELIVERED
@@ -212,7 +213,7 @@ model CourierTracking {
   orderId          String        @unique
   order            Order         @relation(fields: [orderId], references: [id])
   status           CourierStatus
-  trackingNumber   String?
+  trackingNumber   String?        @unique
   carrier          String?
   estimatedArrival DateTime?
   updatedAt        DateTime      @updatedAt
