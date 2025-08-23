@@ -32,8 +32,7 @@ function LoginUser() {
     </div>:
     <p className={styles.btn} onClick={()=>{setSignIn(true)}}>Log in/sign up</p>}
     {openSignIn&&<div className={styles.signInMod}>
-        <SignIn routing="hash"
-        />
+        <SignIn routing="hash"/>
         <button className={styles.Btn} onClick={()=>{setSignIn(false)}}>x</button>
     </div>}
     </>
