@@ -4,7 +4,8 @@ import db from '../libs/db.json'
 import Hero from '../components/hero/Hero'
 import ClassicGrid from '../components/classicgrid/ClassicGrid'
 import ProductGrid from '../components/productgrid/Productgrid'
-import { getCategory, getHeroes } from '../libs/category'
+import { getCategory } from '../libs/category'
+import {getHeroes} from '../libs/hero'
 import { getBestSellers, getWeekSales } from '../libs/product'
 export default async function Home() {
  const categories =await getCategory()

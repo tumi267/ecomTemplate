@@ -11,7 +11,7 @@ function MouseOverCart() {
   const items = useCartStore((state) => state.items)
   const incrementItem = useCartStore((state) => state.incrementItem)
   const decrementItem = useCartStore((state) => state.decrementItem)
-console.log(items)
+
   return (
     <div className={styles.cartPreview}>
       <h4>Your Cart</h4>
@@ -23,6 +23,12 @@ console.log(items)
             <li className={styles.item} key={i}>
               <div className={styles.image}><Image src={item.product.imagePath!==""?item.product.imagePath:'/next.svg'} alt={item?.product?.name} fill /></div>
               {item.product?.name} x{item.quantity}
+              {Object.entries(item?.options || {}).map(([key, value]) => (
+                <div key={key} className="flex gap-2">
+                  <span className="font-medium capitalize">{key}:</span>
+                <span>{value}</span>
+                </div>
+              ))}
               <div className={styles.qtyBtnContain}>
               <button className={styles.qtyBtn} onClick={() => incrementItem(item.id)}>+</button>
               <button className={styles.qtyBtn} onClick={() => decrementItem(item.id)}>-</button>

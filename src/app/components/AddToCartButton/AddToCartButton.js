@@ -27,7 +27,6 @@ export default function AddToCartButton({ product, disabled = false }) {
 
   const handleClick = () => {
     if (shouldDisable) return
-
     addItem({
       id,
       productId: product.id,

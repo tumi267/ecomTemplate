@@ -6,12 +6,24 @@ import { useUserStore } from '../../libs/useUserStore'
 import { useEffect } from 'react'
 import { useUser } from '@clerk/nextjs' // Assuming Clerk
 function LoginUser() {
-    const { user, isLoaded } = useUser() // from Clerk
+  const { user, isLoaded } = useUser() // from Clerk
   const setUser = useUserStore((state) => state.setUser)
   const clearUser = useUserStore((state) => state.clearUser)
     const [openSignIn,setSignIn]=useState(false)
     const [isSignout,setisSingout]=useState(false)
     const { signOut } = useClerk()
+    useEffect(()=>{
+      const getcartdata=async()=>{
+        const cart = localStorage.getItem('cart-storage');
+      
+        const res=await fetch('/api/cart/getCartOrder',{
+          method:"POST",
+          header:{"Content-Type":"application/json"},
+          body:JSON.stringify({cart})
+        })
+      }
+      // getcartdata()
+    },[])
     useEffect(() => {
         if (isLoaded && user) {
           setUser({
@@ -20,6 +32,8 @@ function LoginUser() {
             firstName: user.firstName,
             lastName: user.lastName,
           })
+          // set zustand user
+          
         }
       }, [isLoaded, user])
   return (

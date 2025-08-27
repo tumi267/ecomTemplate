@@ -24,9 +24,7 @@ export async function getSingleProduct(id: string) {
   })
 }
 
-
 // get all category products
-
 export async function getProductsByCategory(categoryId: string) {
   if (!categoryId) {
     throw new Error('Missing required categoryId')
@@ -43,7 +41,6 @@ export async function getProductsByCategory(categoryId: string) {
   })
 }
 
-
 // get all product where best seller == true
 export async function getBestSellers() {
   return await prisma.product.findMany({
@@ -57,7 +54,6 @@ export async function getBestSellers() {
   })
 }
 
-// 
 // get all prooducts where weeklysale == true
 export async function getWeekSales() {
   return await prisma.product.findMany({
@@ -70,7 +66,6 @@ export async function getWeekSales() {
     },
   })
 }
-
 
 // Create a product
 export async function createProduct(data: {
@@ -195,18 +190,14 @@ export async function updateProductSale(
     const product = await prisma.product.findUnique({
       where: { id: productId },
     });
-
     if (!product) throw new Error("Product not found");
-
     const productUpdates: any = {
       qty:{ decrement: quantity },
       unitsSold: { increment: quantity },
     };
-
     if (product.trackQty && product.qty >= quantity) {
       productUpdates.qty = { decrement: quantity };
     }
-
     const [updatedProduct, newSale] = await prisma.$transaction([
       prisma.product.update({
         where: { id: productId },
@@ -221,11 +212,9 @@ export async function updateProductSale(
         },
       }),
     ]);
-
     return { updatedProduct, newSale };
   }
 }
-
 
 // get product sales
 export async function getProductSales(productID:string) {
@@ -235,8 +224,6 @@ export async function getProductSales(productID:string) {
     },
   })
 }
-
-
 
 // Delete a product
 export async function deleteProduct(id: string) {
@@ -254,13 +241,6 @@ export async function uniqeProduct(sku: string) {
   })
 }
 
-export async function findCategoryByName(name : string) {
-  return await prisma.category.findUnique({ where: { name } })
-}
-
-export async function findSupplierByEmail(email: string) {
-  return await prisma.supplier.findUnique({ where: { email } })
-}
 
 // ✅ Get all variants for a specific productId (required)
 export async function getVariants(productId: string) {
@@ -343,163 +323,3 @@ export async function deleteVariant(id: string) {
   })
 }
 
-export async function addDiscount(id: string, data: {
-  discount?: number | string
-  weekSale?: boolean
-}) {
-  const updateData: any = {}
-
-  if (data.discount !== undefined) {
-    updateData.discount = parseFloat(data.discount as string)
-  }
-
-  if (data.weekSale !== undefined) {
-    updateData.weekSale = data.weekSale
-  }
-
-  return await prisma.product.update({
-    where: { id },
-    data: updateData,
-  })
-}
-
-// create order
-export async function createOrder(data: {
-  userId?: string | null;
-  items: {
-    productId: string
-    variantId: string | null
-    quantity: number
-    product: Record<string, any>
-    price: number
-    options: Record<string, any>
-  }[];
-  customer: {
-    name: string;
-    phone: string;
-    email: string;
-    streetAddress: string;
-    suburb?: string;
-    city: string;
-    postalCode: string;
-    province?: string;
-    country?: string;
-  };
-}) {
-  const { userId, items, customer } = data;
-
-  if (!items || items.length === 0) throw new Error('No order items provided');
-  if (
-    !customer?.name ||
-    !customer.email ||
-    !customer.phone ||
-    !customer.streetAddress ||
-    !customer.city ||
-    !customer.postalCode
-  ) {
-    throw new Error('Incomplete customer information');
-  }
-
-  const totalPrice = items.reduce(
-    (sum, item) =>
-      sum.add(new Prisma.Decimal(item.price).mul(item.quantity)),
-    new Prisma.Decimal(0)
-  );
-
-  try {
-    const order = await prisma.order.create({
-      data: {
-        status: 'PENDING',
-        price: totalPrice,
-        productJSON: JSON.stringify(items), // 👈 Save full items array as JSON
-        shippingAddressLine1: customer.streetAddress,
-        shippingAddressLine2: customer.suburb || '',
-        shippingCity: customer.city,
-        shippingProvince: customer.province || '',
-        shippingPostalCode: customer.postalCode,
-        shippingCountry: customer.country || '',
-        customerName: customer.name,
-        customerEmail: customer.email,
-        customerPhone: customer.phone,
-        ...(userId ? { user: { connect: { id: userId } } } : {}),
-      },
-    });
-
-    return order;
-  } catch (error) {
-    console.error('Order creation failed:', error);
-    throw new Error(
-      `Order creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-    );
-  }
-}
-// get orders
-
-
-export async function getOrders() {
-  return await prisma.order.findMany({orderBy: {
-    createdAt: 'desc', // Newest orders first
-  },})
-}
-// get orders between
-export async function getOrdersbetween({
-  from,
-  to,
-}: {
-  from?: string;
-  to?: string;
-}) {
-  const filters: any = {};
-
-  if (from && to) {
-    filters.createdAt = {
-      gte: new Date(from),
-      lte: new Date(to),
-    };
-  }
-
-  return await prisma.order.findMany({
-    where: filters,
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-}
-export async function getuserOrders(customerEmail: string) {
-  return await prisma.order.findMany({
-    where: { customerEmail }, // Filters orders by the user's email
-    orderBy: {
-      createdAt: 'desc', // Newest orders first
-    },
-  })
-}
-
-
-export async function getSingleOrder(id: string){
-  return await prisma.order.findUnique({
-    where:{id}
-  })
-}
-// update order
-export async function proccessOrder(id: string,updatedItems:string,status:OrderStatus,payment:PaymentStatus) {
-  await prisma.order.update({
-    where: {id},
-    data: {
-      productJSON: JSON.stringify(updatedItems),
-      status:status,
-      paymentStatus:payment
-    }
-  });
-}
-// Get all orders where payment == "PAID"
-export async function getOrdersPAID(status: string) {
-
-  return await prisma.order.findMany({
-    where: {
-      paymentStatus: status as PaymentStatus,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-}

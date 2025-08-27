@@ -45,3 +45,8 @@ export async function getSingleSupplier(id: string) {
       include: { products: true },
     })
   }
+
+
+  export async function findSupplierByEmail(email: string) {
+    return await prisma.supplier.findUnique({ where: { email } })
+  }

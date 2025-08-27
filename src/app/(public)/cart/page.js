@@ -48,6 +48,7 @@ function Cart() {
       customer.city.trim() !== ''
     )
   }
+  
   return (
     <div className={styles.cartPage}>
 
@@ -57,6 +58,14 @@ function Cart() {
             <div className={styles.image}><Image src={e.product.imagePath!==""?e.product.imagePath:'/next.svg'} alt={e?.product?.name} fill /></div>
             <div className={styles.itemInfo}>
               <p className={styles.itemName}>{e?.product?.name}</p>
+
+              {Object.entries(e?.options || {}).map(([key, value]) => (
+                <div key={key} className="flex gap-2">
+                  <span className="font-medium capitalize">{key}:</span>
+                <span>{value}</span>
+                </div>
+              ))}
+              
               <p className={styles.itemQty}>Qty: {e.quantity}</p>
               <p className={styles.itemPrice}>R {e.price} {e?.product?.discount>0&&<span>sale</span>}</p>
             </div>
