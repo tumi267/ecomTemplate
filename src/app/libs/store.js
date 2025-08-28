@@ -69,8 +69,7 @@ export const useCartStore = create(
             }),
           })
           const data = await res.json()
-          console.log(data)
-      
+
           if (data) set({ cartId: data.id,paymentStatus:data.paymentStatus })
         } catch (err) {
           console.error('Failed to sync cart', err)
@@ -84,8 +83,8 @@ export const useCartStore = create(
         get().updateTotals()
 
         try {
-          await fetch('/api/cart', {
-            method: 'PUT',
+          await fetch('/api/cart/getCartOrder', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ cartId: state.cartId, items }),
           })
@@ -100,11 +99,12 @@ export const useCartStore = create(
         try {
           const { cartId } = get()
           if (cartId) {
-            await fetch('/api/cart/clear', {
+              await fetch('/api/cart/clear', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ cartId }),
             })
+
           }
         } catch (err) {
           console.error('Failed to clear cart', err)
@@ -120,11 +120,14 @@ export const useCartStore = create(
         get().updateTotals()
 
         try {
-          await fetch('/api/cart', {
-            method: 'PUT',
+          const res = await fetch('/api/cart/getCartOrder', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ cartId: state.cartId, items }),
           })
+          const data = await res.json()
+        
+          if (data) set({res})
         } catch (err) {
           console.error('Failed to sync increment', err)
         }
@@ -140,11 +143,14 @@ export const useCartStore = create(
         get().updateTotals()
 
         try {
-          await fetch('/api/cart', {
-            method: 'PUT',
+          const res = await fetch('/api/cart/getCartOrder', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ cartId: state.cartId, items }),
           })
+          const data = await res.json()
+       
+          if (data) set({res})
         } catch (err) {
           console.error('Failed to sync decrement', err)
         }
